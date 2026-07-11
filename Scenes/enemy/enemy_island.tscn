@@ -1,8 +1,13 @@
 [gd_scene format=3 uid="uid://ciqk8xjnpanov"]
 
 [ext_resource type="Texture2D" uid="uid://kxdlkrnelns4" path="res://Assets/enemy_island.png" id="1_7881a"]
+[ext_resource type="Script" uid="uid://cljktj0ysk2o0" path="res://Scripts/island_s.gd" id="1_m71jm"]
+[ext_resource type="PackedScene" uid="uid://dqw3udxe25oaf" path="res://Scenes/enemy/enemy_boat.tscn" id="2_5vonq"]
 
 [node name="EnemyIsland" type="Node3D" unique_id=1749570327]
+script = ExtResource("1_m71jm")
+enemy_spawn_rate = 0.3
+boat = ExtResource("2_5vonq")
 
 [node name="Sprite3D" type="Sprite3D" parent="." unique_id=627668633]
 transform = Transform3D(0.205, 0, 0, 0, 0.205, 0, 0, 0, 0.205, 0, 0, 0)

@@ -1,0 +1,26 @@
+[gd_scene format=3 uid="uid://dqnt87eqnh8k0"]
+
+[ext_resource type="Script" uid="uid://bfxko6yl3ku60" path="res://Scripts/turret_s.gd" id="1_wbe0e"]
+[ext_resource type="Texture2D" uid="uid://bx4uu4n1wkwm4" path="res://Assets/turret.png" id="1_xjgln"]
+
+[sub_resource type="SphereShape3D" id="SphereShape3D_6gp1l"]
+radius = 5.0
+
+[node name="Turret" type="Node3D" unique_id=1518263802]
+script = ExtResource("1_wbe0e")
+damage = 20
+fireRadius = 15
+
+[node name="Sprite3D" type="Sprite3D" parent="." unique_id=163992799]
+render_priority = 2
+texture = ExtResource("1_xjgln")
+
+[node name="Area3D" type="Area3D" parent="." unique_id=745478928]
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="Area3D" unique_id=65494129]
+shape = SubResource("SphereShape3D_6gp1l")
+
+[node name="RangeIndicator" type="MeshInstance3D" parent="." unique_id=2061403276]
+
+[connection signal="body_entered" from="Area3D" to="." method="_on_area_3d_body_entered"]
+[connection signal="body_exited" from="Area3D" to="." method="_on_area_3d_body_exited"]

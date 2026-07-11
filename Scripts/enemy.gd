@@ -1,0 +1,38 @@
+class_name Enemy
+extends CharacterBody3D
+
+@export var speed = 5
+@export var target: Vector3
+@export var maxHealth = 10
+var currentHealth = 10
+var sprite3d
+var flashDamage: bool = false
+@export var flashDamageTime = 0.2
+var flashDamageTimeRemaining = 0
+
+func takeDamage(damage: int) -> void:
+	currentHealth -= damage
+	flashDamage = true
+	print(currentHealth)
+	checkStatus()
+
+func checkStatus():
+	if (currentHealth <= 0):
+		queue_free()
+		
+# Called when the node enters the scene tree for the first time.
+func _ready() -> void:
+	sprite3d = get_node("Sprite3D")
+	currentHealth = maxHealth
+	print(currentHealth)
+	pass
+
+# Called every frame. 'delta' is the elapsed time since the previous frame.
+func _process(delta: float) -> void:
+	if(flashDamage):
+		print("flashDamage")
+		sprite3d.modulate = Color(1,0,0)
+		flashDamageTimeRemaining += delta
+		if(flashDamageTimeRemaining >= flashDamageTime):
+			flashDamage = false
+			sprite3d.modulate = Color(1,1,1)
