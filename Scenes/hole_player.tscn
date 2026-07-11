@@ -1,6 +1,7 @@
 [gd_scene format=3 uid="uid://2f53fjy8td6r"]
 
 [ext_resource type="Script" uid="uid://dwwvdo8385nop" path="res://Scripts/hole_player_s.gd" id="1_bfwi4"]
+[ext_resource type="PackedScene" uid="uid://dqnt87eqnh8k0" path="res://Scenes/player/turret.tscn" id="2_aa4id"]
 [ext_resource type="Texture2D" uid="uid://cpm52lnwbi8uv" path="res://Assets/fish.jpg" id="2_sa8fd"]
 
 [sub_resource type="SphereShape3D" id="SphereShape3D_o2h2n"]
@@ -8,6 +9,7 @@
 [node name="HolePlayer" type="CharacterBody3D" unique_id=391892986 groups=["player"]]
 collision_layer = 3
 script = ExtResource("1_bfwi4")
+turret = ExtResource("2_aa4id")
 
 [node name="CollisionShape3D2" type="CollisionShape3D" parent="." unique_id=1460211735]
 transform = Transform3D(2.375, 0, 0, 0, 2.375, 0, 0, 0, 2.375, 0, 0, 0)

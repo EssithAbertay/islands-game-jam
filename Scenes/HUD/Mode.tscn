@@ -1,0 +1,13 @@
+[gd_scene format=3 uid="uid://cvqv6g8ngobi5"]
+
+[node name="Control" type="Control" unique_id=686894220]
+layout_mode = 3
+anchors_preset = 0
+offset_right = 40.0
+offset_bottom = 40.0
+
+[node name="Label" type="Label" parent="." unique_id=1981803926]
+layout_mode = 0
+offset_right = 55.0
+offset_bottom = 23.0
+text = "Mode"

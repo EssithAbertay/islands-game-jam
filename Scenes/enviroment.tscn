@@ -1,10 +1,16 @@
 [gd_scene format=3 uid="uid://da7r73jbh75ae"]
 
+[ext_resource type="PackedScene" uid="uid://ciqk8xjnpanov" path="res://Scenes/enemy/enemy_island.tscn" id="1_ks4c7"]
 [ext_resource type="Texture2D" uid="uid://cpe7rh3n6xupp" path="res://Assets/ocean.jpg" id="2_ubiir"]
-[ext_resource type="PackedScene" uid="uid://dqnt87eqnh8k0" path="res://Scenes/player/turret.tscn" id="3_ks4c7"]
 [ext_resource type="PackedScene" uid="uid://c1de3immp74h5" path="res://Scenes/points_pickup.tscn" id="4_0evto"]
 [ext_resource type="PackedScene" uid="uid://2f53fjy8td6r" path="res://Scenes/hole_player.tscn" id="4_rw8p7"]
 [ext_resource type="PackedScene" uid="uid://bhkqroynh6w1l" path="res://Scenes/pickup_manager.tscn" id="5_rw8p7"]
+[ext_resource type="PackedScene" uid="uid://cvqv6g8ngobi5" path="res://Scenes/HUD/Mode.tscn" id="6_hhfy0"]
+[ext_resource type="PackedScene" uid="uid://w5r8tvh4f6hu" path="res://Scenes/HUD/Sand.tscn" id="7_ydcye"]
+[ext_resource type="PackedScene" uid="uid://1v4fucmha5kc" path="res://Scenes/HUD/Level.tscn" id="8_ydcye"]
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_07vgb"]
+size = Vector3(30.689575, 19.742188, 1)
 
 [node name="Node3D" type="Node3D" unique_id=1496945402]
 
@@ -14,25 +20,53 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -3.8648944, 0, -10.74256)
 [node name="PointsPickup" parent="." unique_id=2086534983 instance=ExtResource("4_0evto")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -10.927)
 
-[node name="Turret" parent="." unique_id=1518263802 instance=ExtResource("3_ks4c7")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -19.892529, 0, -22.273716)
-
-[node name="Turret2" parent="." unique_id=18098996 instance=ExtResource("3_ks4c7")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 3.5852032, 0, -41.377182)
-
 [node name="HolePlayer" parent="." unique_id=391892986 instance=ExtResource("4_rw8p7")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.017916441, -4.7683716e-07, -2.058532)
 
-[node name="PointsPickup" parent="." unique_id=2086534983 instance=ExtResource("4_0evto")]
+[node name="PointsPickup3" parent="." unique_id=2106410638 instance=ExtResource("4_0evto")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -10.927)
 
-[node name="Turret" parent="." unique_id=1518263802 instance=ExtResource("3_ks4c7")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -19.892529, 0, -22.273716)
-
-[node name="Turret2" parent="." unique_id=18098996 instance=ExtResource("3_ks4c7")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 3.5852032, 0, -41.377182)
-
-[node name="PointsPickup3" parent="." unique_id=122563457 instance=ExtResource("4_0evto")]
+[node name="PointsPickup4" parent="." unique_id=122563457 instance=ExtResource("4_0evto")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 6.866421, 0, -10.7154)
 
 [node name="PickupManager" parent="." unique_id=600735694 instance=ExtResource("5_rw8p7")]
+
+[node name="Sprite3D" type="Sprite3D" parent="." unique_id=380517555]
+transform = Transform3D(12.23, 0, 0, 0, -5.3459024e-07, 12.23, 0, -12.23, -5.3459024e-07, 0, 0, 0)
+texture = ExtResource("2_ubiir")
+
+[node name="StaticBody3D" type="StaticBody3D" parent="Sprite3D" unique_id=54184326]
+transform = Transform3D(1, 0, 0, 0, 1, -7.1054274e-15, 0, 7.1054274e-15, 1, 0, 2.696028e-08, -0.6167793)
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="Sprite3D/StaticBody3D" unique_id=697207676]
+transform = Transform3D(1, 0, 0, 0, 1, -1.0658141e-14, 0, 1.0658141e-14, 1, 0.13140899, -0.07128899, -2.4646951e-14)
+shape = SubResource("BoxShape3D_07vgb")
+
+[node name="EnemyIsland" parent="." unique_id=1749570327 instance=ExtResource("1_ks4c7")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 13.028595, 2.8132272, -44.92163)
+
+[node name="EnemyIsland2" parent="." unique_id=2024720177 instance=ExtResource("1_ks4c7")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -21.820374, 2.8132272, -26.25415)
+
+[node name="CanvasLayer" type="CanvasLayer" parent="." unique_id=1676130279]
+
+[node name="Control" type="Control" parent="CanvasLayer" unique_id=578210321]
+layout_mode = 3
+anchors_preset = 0
+offset_right = 40.0
+offset_bottom = 40.0
+
+[node name="VBoxContainer" type="VBoxContainer" parent="CanvasLayer/Control" unique_id=1594287954]
+layout_mode = 0
+offset_right = 40.0
+offset_bottom = 40.0
+theme_override_constants/separation = 25
+
+[node name="Control2" parent="CanvasLayer/Control/VBoxContainer" unique_id=686894220 instance=ExtResource("6_hhfy0")]
+layout_mode = 2
+
+[node name="Sand" parent="CanvasLayer/Control/VBoxContainer" unique_id=214192745 instance=ExtResource("7_ydcye")]
+layout_mode = 2
+
+[node name="Sand2" parent="CanvasLayer/Control/VBoxContainer" unique_id=1487581671 instance=ExtResource("8_ydcye")]
+layout_mode = 2
