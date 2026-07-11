@@ -3,6 +3,8 @@
 [ext_resource type="PackedScene" uid="uid://ciqk8xjnpanov" path="res://Scenes/enemy/enemy_island.tscn" id="1_ks4c7"]
 [ext_resource type="Texture2D" uid="uid://cpe7rh3n6xupp" path="res://Assets/ocean.jpg" id="2_ubiir"]
 [ext_resource type="PackedScene" uid="uid://dqnt87eqnh8k0" path="res://Scenes/player/turret.tscn" id="3_ks4c7"]
+[ext_resource type="PackedScene" uid="uid://2f53fjy8td6r" path="res://Scenes/hole_player.tscn" id="3_ks4c7"]
+[ext_resource type="PackedScene" uid="uid://b0a8vysu5aejd" path="res://Scenes/points_pickup.tscn" id="4_0evto"]
 
 [node name="Node3D" type="Node3D" unique_id=1496945402]
 
@@ -41,3 +43,7 @@ fireCd = 0.1
 [node name="Turret2" parent="." unique_id=1817653700 instance=ExtResource("3_ks4c7")]
 transform = Transform3D(0.83842015, 0, 0.54502445, 0, 1, 0, -0.54502445, 0, 0.83842015, -20.73181, 0, -23.138008)
 fireCd = 0.1
+[node name="HolePlayer" parent="." unique_id=391892986 instance=ExtResource("3_ks4c7")]
+
+[node name="PointsPickup" parent="." unique_id=2086534983 instance=ExtResource("4_0evto")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -10.927)
