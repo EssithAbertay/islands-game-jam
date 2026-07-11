@@ -1,0 +1,18 @@
+[gd_scene format=3 uid="uid://da7r73jbh75ae"]
+
+[ext_resource type="PackedScene" uid="uid://ciqk8xjnpanov" path="res://Scenes/enemy/enemy_island.tscn" id="1_ks4c7"]
+[ext_resource type="Texture2D" uid="uid://cpe7rh3n6xupp" path="res://Assets/ocean.jpg" id="2_ubiir"]
+
+[node name="Node3D" type="Node3D" unique_id=1496945402]
+
+[node name="Camera3D" type="Camera3D" parent="." unique_id=1945317165]
+transform = Transform3D(1, 0, 0, 0, 0.9442179, 0.3293214, 0, -0.3293214, 0.94421786, 0, 15.572266, 20.749268)
+projection = 1
+size = 32.709076
+
+[node name="EnemyIsland" parent="." unique_id=1749570327 instance=ExtResource("1_ks4c7")]
+transform = Transform3D(0.98027116, 0, 0.19765733, 0, 1, 0, -0.19765733, 0, 0.98027116, -14.042079, 3.1805487, -20.644842)
+
+[node name="Ocean" type="Sprite3D" parent="." unique_id=2129427548]
+transform = Transform3D(10, 0, 0, 0, -4.371139e-07, 10, 0, -10, -4.371139e-07, 0, 0, 0)
+texture = ExtResource("2_ubiir")

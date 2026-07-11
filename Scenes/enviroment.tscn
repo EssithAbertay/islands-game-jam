@@ -2,17 +2,42 @@
 
 [ext_resource type="PackedScene" uid="uid://ciqk8xjnpanov" path="res://Scenes/enemy/enemy_island.tscn" id="1_ks4c7"]
 [ext_resource type="Texture2D" uid="uid://cpe7rh3n6xupp" path="res://Assets/ocean.jpg" id="2_ubiir"]
+[ext_resource type="PackedScene" uid="uid://dqnt87eqnh8k0" path="res://Scenes/player/turret.tscn" id="3_ks4c7"]
 
 [node name="Node3D" type="Node3D" unique_id=1496945402]
 
 [node name="Camera3D" type="Camera3D" parent="." unique_id=1945317165]
 transform = Transform3D(1, 0, 0, 0, 0.9442179, 0.3293214, 0, -0.3293214, 0.94421786, 0, 15.572266, 20.749268)
 projection = 1
-size = 42.58569
-
-[node name="EnemyIsland" parent="." unique_id=1749570327 instance=ExtResource("1_ks4c7")]
-transform = Transform3D(0.98027116, 0, 0.19765733, 0, 1, 0, -0.19765733, 0, 0.98027116, -14.042079, 3.1805487, -20.644842)
+size = 32.709076
 
 [node name="Ocean" type="Sprite3D" parent="." unique_id=2129427548]
-transform = Transform3D(10, 0, 0, 0, -4.371139e-07, 10, 0, -10, -4.371139e-07, 0, 0, 0)
+transform = Transform3D(10, 0, 0, 0, -4.371139e-07, 10, 0, -10, -4.371139e-07, -0.031312943, 0, 0.0070257187)
 texture = ExtResource("2_ubiir")
+
+[node name="EnemyIsland" parent="." unique_id=1749570327 instance=ExtResource("1_ks4c7")]
+transform = Transform3D(0.98027116, 0, 0.19765733, 0, 1, 0, -0.19765733, 0, 0.98027116, -9.490671, 0, -55.272453)
+
+[node name="EnemyIsland5" parent="." unique_id=468672332 instance=ExtResource("1_ks4c7")]
+transform = Transform3D(0.92186314, 0, 0.38751557, 0, 1, 0, -0.38751557, 0, 0.92186314, -7.889452, 0, -20.312561)
+
+[node name="EnemyIsland2" parent="." unique_id=283272367 instance=ExtResource("1_ks4c7")]
+transform = Transform3D(0.8862589, 0, -0.46319026, 0, 1, 0, 0.46319026, 0, 0.8862589, 19.705536, 0, -49.16974)
+
+[node name="EnemyIsland3" parent="." unique_id=1556331324 instance=ExtResource("1_ks4c7")]
+transform = Transform3D(0.9504864, 0, 0.31076643, 0, 1, 0, -0.31076643, 0, 0.9504864, -19.268639, 0, -41.59404)
+
+[node name="EnemyIsland4" parent="." unique_id=100763366 instance=ExtResource("1_ks4c7")]
+transform = Transform3D(0.60119426, 0, -0.79910314, 0, 1, 0, 0.79910314, 0, 0.60119426, 10.179531, 0, -25.663845)
+
+[node name="Turret" parent="." unique_id=1518263802 instance=ExtResource("3_ks4c7")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -1.008, 0, -38.818)
+fireCd = 0.1
+
+[node name="Turret" parent="Turret" unique_id=172428934 instance=ExtResource("3_ks4c7")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 6.3191094, 0, 25.130821)
+fireCd = 0.1
+
+[node name="Turret2" parent="." unique_id=1817653700 instance=ExtResource("3_ks4c7")]
+transform = Transform3D(0.83842015, 0, 0.54502445, 0, 1, 0, -0.54502445, 0, 0.83842015, -20.73181, 0, -23.138008)
+fireCd = 0.1
