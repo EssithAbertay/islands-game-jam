@@ -3,6 +3,8 @@ extends CharacterBody3D
 # How fast the player moves in meters per second.
 @export var speed = 14
 @export var player_score: int = 0
+@export var scale_rate: int = 1.05
+
 
 var target_velocity = Vector3.ZERO
 
@@ -24,12 +26,12 @@ func _physics_process(delta):
 
 
 func _on_collection_area_area_entered(area: Area3D) -> void:
-	print("f")
 	if area.is_in_group("pickup"):
 		if "point_value" in area:
 		# 1. Access the pickup data and add points
 			player_score += area.point_value
 			print("Player Score: ", player_score)
+			scale *= scale_rate
 			area.queue_free()
 		
 	pass # Replace with function body.
