@@ -1,6 +1,6 @@
-[gd_scene format=3 uid="uid://b0a8vysu5aejd"]
+[gd_scene format=3 uid="uid://c1de3immp74h5"]
 
-[ext_resource type="Script" uid="uid://dr56oew2msunn" path="res://points_pickup_s.gd" id="1_1q64a"]
+[ext_resource type="Script" uid="uid://dr56oew2msunn" path="res://Scripts/points_pickup_s.gd" id="1_1q64a"]
 [ext_resource type="Texture2D" uid="uid://d36kpb32qqa8n" path="res://Assets/theguy.jpg" id="1_16ao7"]
 
 [sub_resource type="SphereShape3D" id="SphereShape3D_o2h2n"]
