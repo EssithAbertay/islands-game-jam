@@ -1,6 +1,6 @@
 [gd_scene format=3 uid="uid://2f53fjy8td6r"]
 
-[ext_resource type="Script" uid="uid://dwwvdo8385nop" path="res://Scenes/hole_player_s.gd" id="1_bfwi4"]
+[ext_resource type="Script" uid="uid://dwwvdo8385nop" path="res://Scripts/hole_player_s.gd" id="1_bfwi4"]
 [ext_resource type="Texture2D" uid="uid://cpm52lnwbi8uv" path="res://Assets/fish.jpg" id="2_sa8fd"]
 
 [sub_resource type="SphereShape3D" id="SphereShape3D_o2h2n"]
@@ -23,5 +23,8 @@ collision_layer = 3
 [node name="CollisionShape3D" type="CollisionShape3D" parent="CollectionArea" unique_id=1787295716]
 transform = Transform3D(2.375, 0, 0, 0, 2.375, 0, 0, 0, 2.375, 0, 0, 0)
 shape = SubResource("SphereShape3D_o2h2n")
+
+[node name="Camera3D" type="Camera3D" parent="." unique_id=424201931]
+transform = Transform3D(1, 0, 0, 0, 0.760406, 0.649448, 0, -0.649448, 0.760406, 0, 8.91, 10)
 
 [connection signal="area_entered" from="CollectionArea" to="." method="_on_collection_area_area_entered"]
