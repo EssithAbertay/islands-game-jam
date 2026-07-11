@@ -1,0 +1,19 @@
+[gd_scene format=3 uid="uid://b0a8vysu5aejd"]
+
+[ext_resource type="Script" uid="uid://dr56oew2msunn" path="res://points_pickup_s.gd" id="1_1q64a"]
+[ext_resource type="Texture2D" uid="uid://d36kpb32qqa8n" path="res://Assets/theguy.jpg" id="1_16ao7"]
+
+[sub_resource type="SphereShape3D" id="SphereShape3D_o2h2n"]
+
+[node name="PointsPickup" type="Area3D" unique_id=1041366980 groups=["pickup"]]
+collision_mask = 0
+script = ExtResource("1_1q64a")
+
+[node name="Sprite3D" type="Sprite3D" parent="." unique_id=115415954]
+transform = Transform3D(0.1, 0, 0, 0, 0.1, 0, 0, 0, 0.1, 0, 0, 0)
+render_priority = 10
+texture = ExtResource("1_16ao7")
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="." unique_id=1371667404]
+transform = Transform3D(1.2, 0, 0, 0, 1.2, 0, 0, 0, 1.2, 0, 0, 0)
+shape = SubResource("SphereShape3D_o2h2n")
