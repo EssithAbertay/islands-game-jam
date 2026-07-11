@@ -13,7 +13,8 @@ var scaling: bool = false
 @export var current_stage: int = 0
 @export var stage_count: int = 20
 @export var xp: int = 0
-@export var xp_count: int = 10
+@export var level_thresholds: Array[int] = [0, 10, 30, 70, 150, 300, 600, 1200, 2500, 5000]
+
 
 func _process(delta):
 	# scaling
@@ -34,11 +35,22 @@ func _on_collection_area_area_entered(area: Area3D) -> void:
 		# 1. Access the pickup data and add points
 			player_score += area.point_value
 			print("Player Score: ", player_score)
-			scaling = true
+			
+			xp += area.point_value
+			print("XP: ", xp)
+			check_level_up()
+			
 			scale_up_timer = 0
 			area.queue_free()
 		
 	pass # Replace with function body.
+	
+func check_level_up() -> void:
+	if (current_stage < 10):
+		if xp >= level_thresholds[current_stage]:
+			scaling = true
+			current_stage += 1
+
 	
 func _physics_process(delta):
 

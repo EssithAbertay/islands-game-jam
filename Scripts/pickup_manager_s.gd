@@ -25,8 +25,9 @@ func _process(delta: float) -> void:
 
 func spawnPickup():
 	var new_pickup = pickup.instantiate()
-	spawnLocation = Vector3(randf_range(-10.0, 10.0), 0, randf_range(-10.0, 10.0))
-	spawnSize = randf_range(1, 10.0)
+	spawnLocation = Vector3(randf_range(-10.0, 10.0), 0, randf_range(-10, 10))
+	spawnSize = floor(randf_range(1, 1.0))
 	new_pickup.global_position = spawnLocation
 	new_pickup.scale = Vector3(spawnSize, spawnSize, spawnSize)
+	new_pickup.point_value = spawnSize;
 	add_child(new_pickup)
