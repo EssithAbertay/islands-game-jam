@@ -18,3 +18,5 @@ texture = ExtResource("1_fg1bx")
 
 [node name="CollisionShape3D" type="CollisionShape3D" parent="." unique_id=1511283663]
 shape = SubResource("SphereShape3D_07vgb")
+
+[node name="NavigationAgent3D" type="NavigationAgent3D" parent="." unique_id=620745887]

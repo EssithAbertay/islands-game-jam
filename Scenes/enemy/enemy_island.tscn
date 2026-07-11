@@ -6,7 +6,7 @@
 
 [node name="EnemyIsland" type="Node3D" unique_id=1749570327]
 script = ExtResource("1_m71jm")
-enemy_spawn_rate = 0.9
+enemy_spawn_rate = 5.0
 boat = ExtResource("2_5vonq")
 
 [node name="Sprite3D" type="Sprite3D" parent="." unique_id=627668633]
