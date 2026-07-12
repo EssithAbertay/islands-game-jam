@@ -4,6 +4,7 @@
 [ext_resource type="PackedScene" uid="uid://dqnt87eqnh8k0" path="res://Scenes/player/turret.tscn" id="2_aa4id"]
 [ext_resource type="Texture2D" uid="uid://kc3pwoy434if" path="res://Assets/sand.jpg" id="3_aa4id"]
 [ext_resource type="Texture2D" uid="uid://bs8llvuh6l1sn" path="res://Assets/castle8.png" id="3_sa8fd"]
+[ext_resource type="Texture2D" uid="uid://nwjww3lcpg1m" path="res://Assets/919bae7e.png" id="5_vv0c0"]
 
 [sub_resource type="SphereShape3D" id="SphereShape3D_o2h2n"]
 
@@ -14,6 +15,32 @@ shading_mode = 0
 disable_ambient_light = true
 albedo_texture = ExtResource("3_aa4id")
 disable_receive_shadows = true
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_c7g5q"]
+albedo_texture = ExtResource("3_aa4id")
+
+[sub_resource type="SphereMesh" id="SphereMesh_vhuk2"]
+material = SubResource("StandardMaterial3D_c7g5q")
+radius = 0.125
+height = 0.25
+radial_segments = 16
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_vs0nv"]
+blend_mode = 1
+shading_mode = 0
+vertex_color_use_as_albedo = true
+albedo_texture = ExtResource("5_vv0c0")
+
+[sub_resource type="CylinderMesh" id="CylinderMesh_o2h2n"]
+material = SubResource("StandardMaterial3D_vs0nv")
+top_radius = 0.1
+bottom_radius = 0.1
+radial_segments = 16
+rings = 3
+
+[sub_resource type="Gradient" id="Gradient_rvhdk"]
+offsets = PackedFloat32Array(0, 0.5100671, 1)
+colors = PackedColorArray(1, 0.44313726, 0.7372549, 1, 0.5827933, 0.916375, 0.9999997, 1, 0.20784314, 1, 0, 1)
 
 [node name="HolePlayer" type="CharacterBody3D" unique_id=391892986 groups=["player"]]
 collision_layer = 3
@@ -44,5 +71,47 @@ shape = SubResource("SphereShape3D_o2h2n")
 
 [node name="Camera3D" type="Camera3D" parent="." unique_id=424201931]
 transform = Transform3D(1, 0, 0, 0, 0.760406, 0.649448, 0, -0.649448, 0.760406, 0, 8.91, 10)
+
+[node name="CPUParticles3D" type="CPUParticles3D" parent="." unique_id=1015595378]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -1.5, 0)
+emitting = false
+amount = 32
+lifetime = 0.45
+speed_scale = 3.61
+mesh = SubResource("SphereMesh_vhuk2")
+emission_shape = 3
+emission_box_extents = Vector3(2, 1, 1)
+spread = 180.0
+initial_velocity_min = 1.0
+initial_velocity_max = 2.0
+angular_velocity_min = 200.0
+angular_velocity_max = 200.0
+linear_accel_min = -7.09
+linear_accel_max = -3.45
+tangential_accel_min = 14.1
+tangential_accel_max = 32.54
+scale_amount_min = 0.0
+scale_amount_max = 5.0
+
+[node name="CPUParticles3D_level" type="CPUParticles3D" parent="." unique_id=840238761]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -4)
+cast_shadow = 0
+emitting = false
+amount = 10
+lifetime = 0.15000000000000002
+speed_scale = 3.63
+draw_order = 2
+mesh = SubResource("CylinderMesh_o2h2n")
+emission_shape = 1
+emission_sphere_radius = 2.51
+emission_colors = PackedColorArray(1, 1, 1, 1, 0.32941177, 1, 0.32941177, 1, 0.9308908, 0, 0.4413265, 1)
+direction = Vector3(0, 1, 0)
+spread = 24.5
+initial_velocity_max = 92.9
+linear_accel_min = 78.85
+linear_accel_max = 102.25
+scale_amount_min = 0.0
+color_ramp = SubResource("Gradient_rvhdk")
+hue_variation_max = 1.0
 
 [connection signal="area_entered" from="CollectionArea" to="." method="_on_collection_area_area_entered"]
