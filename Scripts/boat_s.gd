@@ -1,5 +1,6 @@
 extends Enemy
 var player
+
 # Called when the node enters the scene tree for the first time.
 func _ready() -> void:
 	super._ready()
@@ -21,4 +22,6 @@ func _physics_process(delta: float) -> void:
 		rotate_y(PI)
 
 	position += ((direction.normalized()) * speed * delta)
+	
+	
 	pass

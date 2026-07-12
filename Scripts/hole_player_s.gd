@@ -30,6 +30,7 @@ var attackModeTimerRemaining: float = 0
 @onready var time_r: Control = $"../CanvasLayer/Control/Time"
 @onready var popup_r: Control = $"../CanvasLayer/Control/Popup"
 @onready var enemies_remaining_r: Control = $"../CanvasLayer/Control/EnemiesRemaining"
+@onready var lives_r: Control = $"../CanvasLayer/Control/VBoxContainer/Lives"
 
 @onready var cam = $Camera3D
 @onready var ocean: Sprite3D = $"../Sprite3D"
@@ -42,6 +43,9 @@ var waveCdRemaining:float = 0
 var wavesSpawned:int = 0
 var wavesAllSpawned:bool=false
 
+var savedCamPosition: Vector3
+var goToAttack: bool = false
+
 func _ready() -> void:
     if tex_array.size() > 0:
         $Sprite3D.texture = tex_array[0]
@@ -53,92 +57,115 @@ func _ready() -> void:
    
 
 func _input(event: InputEvent) -> void:
-    if(GameState.mode == GameState.Mode.DEFEND or GameState.mode == GameState.Mode.SETUP):
-        if event.is_action_pressed("left_mouse"):
-            print("Tryna build turret")
-            if(GameState.player_score >= GameState.turretCost):
-                GameState.player_score -= GameState.turretCost
-                
-                GameState.turretCost *= GameState.turretCostScaling
-                
-                var mouse_pos = event.position
-                print(mouse_pos)
-                var camera3d = $Camera3D
-                var from = camera3d.project_ray_origin(mouse_pos)
-                var to = from + camera3d.project_ray_normal(mouse_pos) * 1000
-                var query = PhysicsRayQueryParameters3D.create(from, to)
-                query.collision_mask = 1
-                var result = get_world_3d().direct_space_state.intersect_ray(query)
+	if(GameState.mode == GameState.Mode.DEFEND or GameState.mode == GameState.Mode.SETUP):
+		if event.is_action_pressed("left_mouse"):
+			print("Tryna build turret")
+			if(GameState.player_score >= GameState.turretCost):
+				GameState.player_score -= GameState.turretCost
+				
+				GameState.turretCost += GameState.turretCostScaling
+				
+				var mouse_pos = event.position
+				print(mouse_pos)
+				var camera3d = $Camera3D
+				var from = camera3d.project_ray_origin(mouse_pos)
+				var to = from + camera3d.project_ray_normal(mouse_pos) * 1000
+				var query = PhysicsRayQueryParameters3D.create(from, to)
+				query.collision_mask = 1
+				var result = get_world_3d().direct_space_state.intersect_ray(query)
 
-                if result:
-                    var turret_instance = turret.instantiate()
-                    turret_instance.position = Vector3(result.position.x,0,result.position.z)
-                    get_parent().add_child(turret_instance)
-                    
-    if(GameState.mode == GameState.Mode.SETUP):
-        if(Input.is_action_pressed("space")):
-            goToDefend = true
+				if result:
+					var turret_instance = turret.instantiate()
+					turret_instance.position = Vector3(result.position.x,0,result.position.z)
+					get_parent().add_child(turret_instance)
+					
+	if(GameState.mode == GameState.Mode.SETUP):
+		if(Input.is_action_pressed("space")):
+			goToDefend = true
+			
+	if(GameState.mode == GameState.Mode.SETUPATTACK):
+		if(Input.is_action_pressed("space")):
+			goToAttack = true
 
 func _process(delta):
-    # scaling
-    scale_up_timer += delta
-    if (scaling == true):
-        if (scale_up_timer <= scale_up_timer_max):
-            new_scale = scale * scale_rate
-            scale = new_scale + (scale - new_scale) * scale_up_timer
-            $CPUParticles3D_level.emitting = true;
-        else: 
-            scale_up_timer = 0
-            scaling = false
-            $CPUParticles3D_level.emitting = false;
-      
-    # swapping
-    if(GameState.mode == GameState.Mode.ATTACK):
-        attackModeTimerRemaining += delta	
-        
-        # moving to setup mode
-        if (attackModeTimerRemaining >= attackModeTimer):
-            GameState.mode = GameState.Mode.SETUP
-            attackModeTimerRemaining = attackModeTimer
-            cam.position.y *=2
-            popup_r.visible = true
-            time_r.visible = false
-    # going to defend
-    elif(GameState.mode == GameState.Mode.SETUP):
-        if(goToDefend):
-            goToDefend = false
-            GameState.mode = GameState.Mode.DEFEND
-            enemies_remaining_r.visible = true
-            popup_r.visible = false
-            
-            waveCdRemaining = waveCd - 1.5
-    # moving bacck to attack mode when enemies are dead
-    elif (GameState.mode == GameState.Mode.DEFEND):
-        if(!wavesAllSpawned):
-            waveCdRemaining += delta
-            if (waveCdRemaining < waveCd and GameState.spawnWave):
-                GameState.spawnWave = false
-                
-            if (waveCdRemaining >= waveCd):
-                waveCdRemaining = 0
-                GameState.spawnWave = true
-                wavesSpawned += 1
-                
-            if(wavesSpawned >= GameState.numberOfWavesToSpawn):
-                GameState.spawnWave = false
-                wavesAllSpawned = true
-        else:
-            # wait till all enemies defeated to carry on
-            if(get_tree().get_nodes_in_group("enemy").size() <= 0):
-                GameState.mode = GameState.Mode.SETUPATTACK
-                popup_r.visible = true
-                enemies_remaining_r.visible = false
-                popup_r.get_node("Label").text = "All enemies in wave defated!\n Press space to continue"
-        
-    elif (GameState.mode == GameState.Mode.SETUPATTACK):
-        time_r.visible=true
-    
-    updateGameState()
+	# scaling
+	scale_up_timer += delta
+	if (scaling == true):
+		if (scale_up_timer <= scale_up_timer_max):
+			new_scale = scale * scale_rate
+			scale = new_scale + (scale - new_scale) * scale_up_timer
+			$CPUParticles3D_level.emitting = true;
+		else: 
+			scale_up_timer = 0
+			scaling = false
+			$CPUParticles3D_level.emitting = false;
+	  
+	# swapping
+	if(GameState.mode == GameState.Mode.ATTACK):
+		attackModeTimerRemaining += delta	
+		
+		# moving to setup mode
+		if (attackModeTimerRemaining >= attackModeTimer):
+			savedCamPosition = cam.position
+			GameState.mode = GameState.Mode.SETUP
+			popup_r.get_node("Label").text = "The Boats are coming! Defend Yourself! \nClick To Place A Turret \n Turrets Cost: " + str(GameState.turretCost) + " Sand!\nPress Space To Start Wave!"
+			attackModeTimerRemaining = attackModeTimer
+			cam.position.y *=2
+			popup_r.visible = true
+			time_r.visible = false
+	# going to defend
+	elif(GameState.mode == GameState.Mode.SETUP):
+		if(goToDefend):
+			goToDefend = false
+			GameState.mode = GameState.Mode.DEFEND
+			enemies_remaining_r.visible = true
+			popup_r.visible = false
+			
+			waveCdRemaining = waveCd - 1.5
+	# moving bacck to attack mode when enemies are dead
+	elif (GameState.mode == GameState.Mode.DEFEND):
+		if(!wavesAllSpawned):
+			waveCdRemaining += delta
+			if (waveCdRemaining < waveCd and GameState.spawnWave):
+				GameState.spawnWave = false
+				
+			if (waveCdRemaining >= waveCd):
+				waveCdRemaining = 0
+				GameState.spawnWave = true
+				wavesSpawned += 1
+				
+			if(wavesSpawned >= GameState.numberOfWavesToSpawn):
+				GameState.spawnWave = false
+				wavesAllSpawned = true
+		else:
+			# wait till all enemies defeated to carry on
+			if(get_tree().get_nodes_in_group("enemy").size() <= 0):
+				GameState.mode = GameState.Mode.SETUPATTACK
+				popup_r.visible = true
+				enemies_remaining_r.visible = false
+				popup_r.get_node("Label").text = "All enemies in wave defated!\n Press space to continue"
+		
+	elif (GameState.mode == GameState.Mode.SETUPATTACK):
+		time_r.visible=true
+
+		if(goToAttack):		
+			GameState.spawnIslands = true
+			GameState.numIslandsToSpawn += 3
+			# back to attack mode
+			goToAttack = false
+			cam.position =savedCamPosition
+			GameState.mode = GameState.Mode.ATTACK
+	
+	updateGameState()
+	
+	# restart game on death
+	if(GameState.lives_remaining <= 0):
+		popup_r.visible = true
+		popup_r.get_node("Label").text = "YOU LOSE!\nRESTARTING..."
+		GameState.mode = GameState.Mode.DEFEND
+		await get_tree().create_timer(3.0).timeout
+		GameState.reset()
+		get_tree().reload_current_scene()
 
 func _on_collection_area_area_entered(area: Area3D) -> void:
     if area.is_in_group("pickup"):
@@ -228,10 +255,21 @@ func _physics_process(delta):
             cam.position.z -= 1
 
 func updateGameState():
-    GameState.current_stage = current_stage
+	GameState.current_stage = current_stage
+	
+	lives_r.get_node("Label").text = "Lives: "+ str(GameState.lives_remaining)
+	level_r.get_node("Label").text = "Size Level: "+ str(current_stage)
+	sand_r.get_node("Label").text = "Sand: " + str(GameState.player_score)
+	mode_r.get_node("Label").text = "Mode: " + "ATTACK" if GameState.mode == GameState.Mode.ATTACK else "DEFENCE"  if GameState.mode == GameState.Mode.DEFEND else "SETUP"
+	time_r.get_node("Label").text = "Time Remaining\n" + str(floor(attackModeTimer - attackModeTimerRemaining))
+	GameState.is_moving = is_moving
 
-    level_r.get_node("Label").text = "Size Level: "+str(current_stage)
-    sand_r.get_node("Label").text = "Sand: " + str(GameState.player_score)
-    mode_r.get_node("Label").text = "Mode: " + "ATTACK" if GameState.mode == GameState.Mode.ATTACK else "DEFENCE"  if GameState.mode == GameState.Mode.DEFEND else "SETUP"
-    time_r.get_node("Label").text = "Time Remaining \n: " + str(floor(attackModeTimer - attackModeTimerRemaining))
-    GameState.is_moving = is_moving
+	enemies_remaining_r.get_node("Label").text = "Enemies Remaining\n" + str(get_tree().get_nodes_in_group("enemy").size())
+
+    
+func _on_death_area_body_entered(body: Node3D) -> void:
+  print("ENTERED" + str(body))
+	GameState.lives_remaining-=1
+	body.queue_free()
+	
+	pass # Replace with function body.

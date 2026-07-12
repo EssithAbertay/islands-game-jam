@@ -19,13 +19,14 @@ func _ready() -> void:
 # Called every frame. 'delta' is the elapsed time since the previous frame.
 func _process(delta: float) -> void:
 	
-	timer += delta
-	if (timer >= timerMax):
-		timer = 0
-		
-		var spawning = randi_range(minToSpawn,maxToSpawn)
-		for n in spawning:
-			spawnPickup()
+	if(GameState.mode == GameState.Mode.ATTACK):
+		timer += delta
+		if (timer >= timerMax):
+			timer = 0
+			
+			var spawning = randi_range(minToSpawn,maxToSpawn)
+			for n in spawning:
+				spawnPickup()
 
 
 func spawnPickup():
