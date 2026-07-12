@@ -9,8 +9,10 @@ grow_horizontal = 2
 
 [node name="Label" type="Label" parent="." unique_id=1055747093]
 layout_mode = 0
-offset_right = 40.0
-offset_bottom = 23.0
+offset_left = -37.0
+offset_top = 1.0
+offset_right = 36.0
+offset_bottom = 50.0
 text = "Time Left
 100s"
 horizontal_alignment = 1

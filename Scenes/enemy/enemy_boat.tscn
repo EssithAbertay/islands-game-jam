@@ -1,12 +1,13 @@
 [gd_scene format=3 uid="uid://dqw3udxe25oaf"]
 
 [ext_resource type="Script" uid="uid://chu51fgdf1ras" path="res://Scripts/boat_s.gd" id="1_8fsh6"]
-[ext_resource type="Texture2D" uid="uid://bjv4ar8a17enc" path="res://Assets/enemy_boat.png" id="1_fg1bx"]
+[ext_resource type="PackedScene" uid="uid://bv34nloxwxi3u" path="res://Assets/Bote.fbx" id="2_8fsh6"]
 
 [sub_resource type="SphereShape3D" id="SphereShape3D_07vgb"]
-radius = 2.5579734
+radius = 4.38035
 
 [node name="EnemyBoat" type="CharacterBody3D" unique_id=2047224162 groups=["enemy"]]
+transform = Transform3D(0.35, 0, 0, 0, 0.35, 0, 0, 0, 0.35, 0, 0, 0)
 collision_layer = 4
 collision_mask = 4
 script = ExtResource("1_8fsh6")
@@ -14,11 +15,9 @@ target = Vector3(10, 0, 10)
 maxHealth = 40
 flashDamageTime = 0.1
 
-[node name="Sprite3D" type="Sprite3D" parent="." unique_id=655860053]
-render_priority = 2
-texture = ExtResource("1_fg1bx")
-
 [node name="CollisionShape3D" type="CollisionShape3D" parent="." unique_id=1511283663]
 shape = SubResource("SphereShape3D_07vgb")
 
 [node name="NavigationAgent3D" type="NavigationAgent3D" parent="." unique_id=620745887]
+
+[node name="Bote" parent="." unique_id=1709197713 instance=ExtResource("2_8fsh6")]

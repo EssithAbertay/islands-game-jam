@@ -2,25 +2,15 @@ extends Node
 
 @export var islandScene: PackedScene
 
-@export var islandSpawnCD: int = 10
-var islandSpawnCdRemaining: float = 0
+@export var islandNumbers: int = 20
 
 # Called when the node enters the scene tree for the first time.
 func _ready() -> void:
-	pass # Replace with function body.
-
-# Called every frame. 'delta' is the elapsed time since the previous frame.
-func _process(delta: float) -> void:
-	islandSpawnCdRemaining += delta
-	
-	if(islandSpawnCdRemaining >= islandSpawnCD):
-		islandSpawnCdRemaining = 0
+	for n in islandNumbers:
 		spawnIsland()
-
 
 func spawnIsland():
 	var islandSceneInstance = islandScene.instantiate()
 	islandSceneInstance.position = GameState.getRandomSpawnLocation()
-	
+	islandSceneInstance.position.y +=2
 	add_child(islandSceneInstance)
-	pass

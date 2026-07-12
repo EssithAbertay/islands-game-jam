@@ -9,6 +9,7 @@ radius = 5.0
 [node name="Turret" type="Node3D" unique_id=1518263802]
 script = ExtResource("1_wbe0e")
 damage = 20
+fireCd = 0.3
 fireRadius = 15
 
 [node name="Sprite3D" type="Sprite3D" parent="." unique_id=163992799]

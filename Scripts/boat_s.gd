@@ -15,5 +15,10 @@ func _physics_process(delta: float) -> void:
 	# move towards point
 	var direction: Vector3
 	direction =  target - global_position
+	
+	if direction.length() > 0.001:
+		look_at(target, Vector3.UP)
+		rotate_y(PI)
+
 	position += ((direction.normalized()) * speed * delta)
 	pass

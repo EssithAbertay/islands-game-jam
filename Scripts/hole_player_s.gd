@@ -28,32 +28,43 @@ var attackModeTimerRemaining: float = 0
 @onready var mode_r: Control = $"../CanvasLayer/Control/VBoxContainer/Mode"
 @onready var sand_r: Control = $"../CanvasLayer/Control/VBoxContainer/Sand"
 @onready var time_r: Control = $"../CanvasLayer/Control/Time"
+@onready var popup_r: Control = $"../CanvasLayer/Control/Popup"
 
 @onready var cam = $Camera3D
 @onready var ocean: Sprite3D = $"../Sprite3D"
 
+@export var turretCostScaling: float = 1.1
 func _ready() -> void:
 	if tex_array.size() > 0:
 		$Sprite3D.texture = tex_array[0]
 
 func _input(event: InputEvent) -> void:
-	if event.is_action_pressed("left_mouse") and mode == Mode.DEFEND:
-		print("Tryna build turret")
-		if(GameState.player_score >= turret_cost):
-			GameState.player_score -= turret_cost
-			var mouse_pos = event.position
-			print(mouse_pos)
-			var camera3d = $Camera3D
-			var from = camera3d.project_ray_origin(mouse_pos)
-			var to = from + camera3d.project_ray_normal(mouse_pos) * 1000
-			var query = PhysicsRayQueryParameters3D.create(from, to)
-			query.collision_mask = 1
-			var result = get_world_3d().direct_space_state.intersect_ray(query)
+	if(GameState.mode == GameState.Mode.DEFEND):
+		if event.is_action_pressed("left_mouse"):	
+			print("Tryna build turret")
+			if(GameState.player_score >= turret_cost):
+				GameState.player_score -= turret_cost
+				
+				turret_cost *= turretCostScaling
+				
+				var mouse_pos = event.position
+				print(mouse_pos)
+				var camera3d = $Camera3D
+				var from = camera3d.project_ray_origin(mouse_pos)
+				var to = from + camera3d.project_ray_normal(mouse_pos) * 1000
+				var query = PhysicsRayQueryParameters3D.create(from, to)
+				query.collision_mask = 1
+				var result = get_world_3d().direct_space_state.intersect_ray(query)
 
-			if result:
-				var turret_instance = turret.instantiate()
-				turret_instance.position = Vector3(result.position.x,0,result.position.z)
-				get_parent().add_child(turret_instance)
+
+				if result:
+					var turret_instance = turret.instantiate()
+					turret_instance.position = Vector3(result.position.x,0,result.position.z)
+					get_parent().add_child(turret_instance)
+	elif(GameState.mode == GameState.Mode.SETUP):		
+		if(Input.is_action_pressed("space")):
+			GameState.state = GameState.Mode.DEFEND
+
 
 func _process(delta):
 	# scaling
@@ -70,15 +81,16 @@ func _process(delta):
 	  
 	  	# swapping
 
-	if(mode == Mode.ATTACK):
+	if(GameState.mode == GameState.Mode.ATTACK):
 		attackModeTimerRemaining += delta	
 		
 		if (attackModeTimerRemaining >= attackModeTimer):
-			mode = Mode.DEFEND
+			GameState.mode = GameState.Mode.SETUP
 			attackModeTimerRemaining = attackModeTimer
 			cam.position.y *=2
+			popup_r.get_node("Label").text = "Press Space To Start Wave!"
 
-	elif (mode == Mode.DEFEND):
+	elif (GameState.mode == GameState.Mode.DEFEND):
 		pass
 		
 	updateGameState()
@@ -111,9 +123,15 @@ func check_level_up() -> void:
 	
 func _physics_process(delta):
 	
-	if(mode == Mode.ATTACK):
+	if(GameState.mode == GameState.Mode.ATTACK):
 		var direction = Vector3.ZERO
 
+
+		print((ocean.global_position.x + ((ocean.texture.get_width()/2) * ocean.scale.x))*ocean.pixel_size-15)
+		print((ocean.global_position.x - ((ocean.texture.get_width()/2) * ocean.scale.x))*ocean.pixel_size+15)
+		print((ocean.global_position.z + ((ocean.texture.get_height()/2) * ocean.scale.z))*ocean.pixel_size-15)
+		print((ocean.global_position.z -((ocean.texture.get_height()/2) * ocean.scale.z))*ocean.pixel_size+15)
+		
 		if Input.is_action_pressed("move_right") and position.x < (ocean.global_position.x + ((ocean.texture.get_width()/2) * ocean.scale.x))*ocean.pixel_size-15:
 			position.x += 1
 		if Input.is_action_pressed("move_left") and position.x > (ocean.global_position.x - ((ocean.texture.get_width()/2) * ocean.scale.x))*ocean.pixel_size+15:
@@ -124,7 +142,7 @@ func _physics_process(delta):
 			position.z -= 1
 		move_and_slide()
 		
-	elif(mode == Mode.DEFEND):
+	elif(GameState.mode == GameState.Mode.DEFEND):
 		
 		if Input.is_action_pressed("move_right") and position.x < (ocean.global_position.x + ((ocean.texture.get_width()/2) * ocean.scale.x))*ocean.pixel_size-15:
 			cam.position.x += 1
@@ -137,10 +155,9 @@ func _physics_process(delta):
 
 
 func updateGameState():
-	GameState.mode = int(mode)
 	GameState.current_stage = current_stage
 
 	level_r.get_node("Label").text = "Size Level: "+str(current_stage)
 	sand_r.get_node("Label").text = "Sand: " + str(GameState.player_score)
-	mode_r.get_node("Label").text = "ATTACK" if mode==Mode.ATTACK else "DEFENCE"
+	mode_r.get_node("Label").text = "ATTACK" if GameState.mode == GameState.Mode.ATTACK else "DEFENCE"  if GameState.mode == GameState.Mode.DEFEND else "SETUP"
 	time_r.get_node("Label").text = "Time Remaining \n: " + str(floor(attackModeTimer - attackModeTimerRemaining))
