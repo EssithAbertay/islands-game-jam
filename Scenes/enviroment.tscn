@@ -2,7 +2,6 @@
 
 [ext_resource type="PackedScene" uid="uid://ciqk8xjnpanov" path="res://Scenes/enemy/enemy_island.tscn" id="1_ks4c7"]
 [ext_resource type="Texture2D" uid="uid://cpe7rh3n6xupp" path="res://Assets/ocean.jpg" id="2_ubiir"]
-[ext_resource type="PackedScene" uid="uid://c1de3immp74h5" path="res://Scenes/points_pickup.tscn" id="4_0evto"]
 [ext_resource type="PackedScene" uid="uid://2f53fjy8td6r" path="res://Scenes/hole_player.tscn" id="4_rw8p7"]
 [ext_resource type="Texture2D" uid="uid://b3rlxkufk4e27" path="res://Assets/water4.jpg" id="5_4k8vw"]
 [ext_resource type="PackedScene" uid="uid://bhkqroynh6w1l" path="res://Scenes/pickup_manager.tscn" id="5_rw8p7"]
@@ -51,15 +50,9 @@ sky = SubResource("Sky_ftbm7")
 
 [node name="Node3D" type="Node3D" unique_id=1496945402]
 
-[node name="PointsPickup2" parent="." unique_id=1041366980 instance=ExtResource("4_0evto")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -3.8648944, 0, -10.74256)
-
-[node name="PointsPickup" parent="." unique_id=2086534983 instance=ExtResource("4_0evto")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -10.927)
-
 [node name="HolePlayer" parent="." unique_id=391892986 instance=ExtResource("4_rw8p7")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.017916441, -4.7683716e-07, -2.058532)
-attackModeTimer = 15
+attackModeTimer = 1000
 
 [node name="PickupManager" parent="." unique_id=600735694 instance=ExtResource("5_rw8p7")]
 timerMax = 1.0

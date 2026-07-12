@@ -4,6 +4,7 @@ var pickup = preload("res://Scenes/points_pickup.tscn")
 @export var timerMax: float = 3
 @export var maxToSpawn: int = 2
 @export var minToSpawn: int = 2
+@export var point_value: int = 10
 
 var timer: float = 0
 var spawnLocation: Vector3 = Vector3(0,0,0)
@@ -29,10 +30,9 @@ func _process(delta: float) -> void:
 
 func spawnPickup():
 	var new_pickup = pickup.instantiate()
-	add_child(new_pickup)
 	spawnLocation = GameState.getRandomSpawnLocation()
 	spawnSize = floor(randf_range(1, 5.0))
 	new_pickup.global_position = spawnLocation
 	new_pickup.scale = Vector3(spawnSize, spawnSize, spawnSize)
 	new_pickup.point_value = spawnSize;
-	
+	add_child(new_pickup)
