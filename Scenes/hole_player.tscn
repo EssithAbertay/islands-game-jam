@@ -19,6 +19,7 @@ disable_receive_shadows = true
 collision_layer = 3
 script = ExtResource("1_bfwi4")
 turret = ExtResource("2_aa4id")
+turret_cost = 30
 
 [node name="CollisionShape3D2" type="CollisionShape3D" parent="." unique_id=1460211735]
 transform = Transform3D(2.375, 0, 0, 0, 2.375, 0, 0, 0, 2.375, 0, 0, 0)

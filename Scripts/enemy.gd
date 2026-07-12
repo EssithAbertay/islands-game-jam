@@ -10,6 +10,9 @@ var flashDamage: bool = false
 @export var flashDamageTime = 0.2
 var flashDamageTimeRemaining = 0
 @export var value = 7
+const RED = preload("uid://bw2m1jg45241p")
+var original_material
+@onready var bote: MeshInstance3D = $Bote/Plane
 
 func takeDamage(damage: int) -> void:
 	currentHealth -= damage
@@ -24,7 +27,10 @@ func checkStatus():
 		
 # Called when the node enters the scene tree for the first time.
 func _ready() -> void:
-	sprite3d = get_node("Sprite3D")
+	print($Bote.get_children())
+	original_material = bote.get_active_material(0)
+
+	sprite3d = get_node("Bote")
 	currentHealth = maxHealth
 	print(currentHealth)
 	pass
@@ -32,9 +38,8 @@ func _ready() -> void:
 # Called every frame. 'delta' is the elapsed time since the previous frame.
 func _process(delta: float) -> void:
 	if(flashDamage):
-		print("flashDamage")
-		sprite3d.modulate = Color(1,0,0)
+		bote.set_surface_override_material(0,RED)
 		flashDamageTimeRemaining += delta
 		if(flashDamageTimeRemaining >= flashDamageTime):
 			flashDamage = false
-			sprite3d.modulate = Color(1,1,1)
+			bote.set_surface_override_material(0, original_material)
