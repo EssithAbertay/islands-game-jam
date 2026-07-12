@@ -3,7 +3,7 @@ extends CharacterBody3D
 # How fast the player moves in meters per second.
 @export var speed = 14
 @export var player_score: int = 0
-@export var scale_rate: float = 1.001
+@export var scale_rate: float = 1.004
 @export var scale_up_timer_max: float = .8
 var scale_up_timer: float = 0
 var new_scale: Vector3 = Vector3(0,0,0)
@@ -14,7 +14,7 @@ var is_moving: bool = false
 @export var current_stage: int = 0
 @export var stage_count: int = 20
 @export var xp: int = 0
-@export var level_thresholds: Array[int] = [0, 10, 30, 70, 150, 300, 600, 1200, 2500, 5000]
+@export var level_thresholds: Array[int] = [70, 150, 600, 1200, 2500]
 @export var tex_array: Array[Texture2D] = [load("res://Assets/castle8.png"), load("res://Assets/castle7.png"), load("res://Assets/castle9.png"), load("res://Assets/castle6.png"), load("res://Assets/castle10.png")]
 
 enum Mode {ATTACK, DEFEND}
@@ -34,6 +34,8 @@ var attackModeTimerRemaining: float = 0
 
 @onready var cam = $Camera3D
 @onready var ocean: Sprite3D = $"../Sprite3D"
+@export var island_sphere: MeshInstance3D
+var volume: float = 0
 
 var goToDefend: bool = false
 @export var waveCd:float = 3
@@ -45,10 +47,14 @@ var savedCamPosition: Vector3
 var goToAttack: bool = false
 
 func _ready() -> void:
-	if tex_array.size() > 0:
-		$Sprite3D.texture = tex_array[0]
-	popup_r.visible = false
-	enemies_remaining_r.visible = false
+    if tex_array.size() > 0:
+        $Sprite3D.texture = tex_array[0]
+    popup_r.visible = false
+    enemies_remaining_r.visible = false
+
+    var radius = island_sphere.mesh.radius * island_sphere.scale.x
+    volume = (4.0 / 3.0) * PI * pow(radius, 3)
+   
 
 func _input(event: InputEvent) -> void:
 	if(GameState.mode == GameState.Mode.DEFEND or GameState.mode == GameState.Mode.SETUP):
@@ -162,59 +168,91 @@ func _process(delta):
 		get_tree().reload_current_scene()
 
 func _on_collection_area_area_entered(area: Area3D) -> void:
-	if area.is_in_group("pickup"):
-		if "point_value" in area && (scale >= area.scale):
-		# 1. Access the pickup data and add points
-			GameState.player_score += area.point_value
-			print("Player Score: ", GameState.player_score)
-			$"AudioStreamPlayer-pickup".play()
-			
-			xp += area.point_value
-			print("XP: ", xp)
-			check_level_up()
-			
-			scale_up_timer = 0
-			area.queue_free()
-		
-	pass # Replace with function body.
-	
+    if area.is_in_group("pickup"):
+        
+        var target_points = 0
+        var area_vol = 0;
+        var area_ref
+        
+        if "point_value" in area:   
+            target_points = area.point_value  
+            area_vol = area.volume
+            area_ref = area
+        elif area.get_parent() and "point_value" in area.get_parent():
+            target_points = area.get_parent().point_value
+            area_vol = area.get_parent().volume
+            area_ref = area.get_parent()
+            
+        print("area volume: ",area_vol)
+            
+        if (volume/2 >= area_vol):
+            # 1. Access the pickup data and add points
+                GameState.player_score += target_points
+                print("Player Score: ", GameState.player_score)
+                
+                $"AudioStreamPlayer-pickup".play()
+                
+                xp += target_points
+                print("Player XP: ", xp)
+                print("Player target pts: ", target_points)
+                if (xp <= 2500):
+                  check_level_up()
+                else: 
+                    scaling = true
+                
+                scale_up_timer = 0
+                area_ref.queue_free()
+                var radius = island_sphere.mesh.radius * island_sphere.global_basis.get_scale().x
+                volume = (4.0 / 3.0) * PI * pow(radius, 3)
+                
+            
+        
+    pass # Replace with function body.
+    
 func check_level_up() -> void:
-	if (current_stage < 10):
-		if xp >= level_thresholds[current_stage]:
-			scaling = true
-			current_stage += 1
-			if current_stage % 2 == 0:
-				$Sprite3D.texture = tex_array[current_stage/2]
-				$"AudioStreamPlayer-levelup".play()
+    if (current_stage < 5):
+        if xp >= level_thresholds[current_stage] :
+            if current_stage > 0:
+                scaling = true
+                $Sprite3D.texture = tex_array[current_stage]
+                $"AudioStreamPlayer-levelup".play()
+            current_stage += 1
+           
 
 func _physics_process(delta):
-	is_moving = false
-	if(GameState.mode == GameState.Mode.ATTACK):
-		var direction = Vector3.ZERO
+    is_moving = false
+    if(GameState.mode == GameState.Mode.ATTACK):
+        var direction = Vector3.ZERO
 
-		if Input.is_action_pressed("move_right") and position.x < (ocean.global_position.x + ((ocean.texture.get_width()/2) * ocean.scale.x))*ocean.pixel_size-15:
-			position.x += 1
-			is_moving = true;
-		if Input.is_action_pressed("move_left") and position.x > (ocean.global_position.x - ((ocean.texture.get_width()/2) * ocean.scale.x))*ocean.pixel_size+15:
-			position.x -= 1
-			is_moving = true;
-		if Input.is_action_pressed("move_back") and position.z < (ocean.global_position.z + ((ocean.texture.get_height()/2) * ocean.scale.z))*ocean.pixel_size-15:
-			position.z += 1
-			is_moving = true;
-		if Input.is_action_pressed("move_forward") and position.z > (ocean.global_position.z - ((ocean.texture.get_height()/2) * ocean.scale.z))*ocean.pixel_size+15:
-			position.z -= 1
-			is_moving = true;
-		move_and_slide()
-		
-	else:
-		if Input.is_action_pressed("move_right") and cam.position.x < (ocean.global_position.x + ((ocean.texture.get_width()/2) * ocean.scale.x))*ocean.pixel_size-15:
-			cam.position.x += 1
-		if Input.is_action_pressed("move_left") and cam.position.x > (ocean.global_position.x - ((ocean.texture.get_width()/2) * ocean.scale.x))*ocean.pixel_size+15:
-			cam.position.x -= 1
-		if Input.is_action_pressed("move_back") and cam.position.z < (ocean.global_position.z + ((ocean.texture.get_height()/2) * ocean.scale.z))*ocean.pixel_size-15:
-			cam.position.z += 1
-		if Input.is_action_pressed("move_forward") and cam.position.z > (ocean.global_position.z - ((ocean.texture.get_height()/2) * ocean.scale.z))*ocean.pixel_size+15:
-			cam.position.z -= 1
+
+        print((ocean.global_position.x + ((ocean.texture.get_width()/2) * ocean.scale.x))*ocean.pixel_size-15)
+        print((ocean.global_position.x - ((ocean.texture.get_width()/2) * ocean.scale.x))*ocean.pixel_size+15)
+        print((ocean.global_position.z + ((ocean.texture.get_height()/2) * ocean.scale.z))*ocean.pixel_size-15)
+        print((ocean.global_position.z -((ocean.texture.get_height()/2) * ocean.scale.z))*ocean.pixel_size+15)
+        
+        if Input.is_action_pressed("move_right") and position.x < (ocean.global_position.x + ((ocean.texture.get_width()/2) * ocean.scale.x))*ocean.pixel_size-15:
+            position.x += 1
+            is_moving = true;
+        if Input.is_action_pressed("move_left") and position.x > (ocean.global_position.x - ((ocean.texture.get_width()/2) * ocean.scale.x))*ocean.pixel_size+15:
+            position.x -= 1
+            is_moving = true;
+        if Input.is_action_pressed("move_back") and position.z < (ocean.global_position.z + ((ocean.texture.get_height()/2) * ocean.scale.z))*ocean.pixel_size-15:
+            position.z += 1
+            is_moving = true;
+        if Input.is_action_pressed("move_forward") and position.z > (ocean.global_position.z - ((ocean.texture.get_height()/2) * ocean.scale.z))*ocean.pixel_size+15:
+            position.z -= 1
+            is_moving = true;
+        move_and_slide()
+        
+    else:
+        if Input.is_action_pressed("move_right") and cam.position.x < (ocean.global_position.x + ((ocean.texture.get_width()/2) * ocean.scale.x))*ocean.pixel_size-15:
+            cam.position.x += 1
+        if Input.is_action_pressed("move_left") and cam.position.x > (ocean.global_position.x - ((ocean.texture.get_width()/2) * ocean.scale.x))*ocean.pixel_size+15:
+            cam.position.x -= 1
+        if Input.is_action_pressed("move_back") and cam.position.z < (ocean.global_position.z + ((ocean.texture.get_height()/2) * ocean.scale.z))*ocean.pixel_size-15:
+            cam.position.z += 1
+        if Input.is_action_pressed("move_forward") and cam.position.z > (ocean.global_position.z - ((ocean.texture.get_height()/2) * ocean.scale.z))*ocean.pixel_size+15:
+            cam.position.z -= 1
 
 func updateGameState():
 	GameState.current_stage = current_stage
@@ -228,8 +266,9 @@ func updateGameState():
 
 	enemies_remaining_r.get_node("Label").text = "Enemies Remaining\n" + str(get_tree().get_nodes_in_group("enemy").size())
 
+    
 func _on_death_area_body_entered(body: Node3D) -> void:
-	print("ENTERED" + str(body))
+  print("ENTERED" + str(body))
 	GameState.lives_remaining-=1
 	body.queue_free()
 	

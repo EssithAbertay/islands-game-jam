@@ -7,7 +7,7 @@
 [sub_resource type="SphereShape3D" id="SphereShape3D_6gp1l"]
 radius = 4.4427595
 
-[node name="EnemyIsland" type="Node3D" unique_id=1749570327]
+[node name="EnemyIsland" type="Node3D" unique_id=1749570327 groups=["pickup"]]
 script = ExtResource("1_m71jm")
 boat = ExtResource("2_5vonq")
 
@@ -17,6 +17,8 @@ render_priority = 1
 texture = ExtResource("1_7881a")
 
 [node name="Area3D" type="Area3D" parent="." unique_id=35657209 groups=["pickup"]]
+collision_layer = 7
+collision_mask = 0
 
-[node name="CollisionShape3D" type="CollisionShape3D" parent="Area3D" unique_id=1988679538]
+[node name="Island Sphere" type="CollisionShape3D" parent="Area3D" unique_id=1988679538]
 shape = SubResource("SphereShape3D_6gp1l")
