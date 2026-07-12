@@ -54,6 +54,7 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 3.5852032, 0, -41.377182)
 
 [node name="HolePlayer" parent="." unique_id=391892986 instance=ExtResource("4_rw8p7")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.017916441, -4.7683716e-07, -2.058532)
+attackModeTimer = 50
 
 [node name="PickupManager" parent="." unique_id=600735694 instance=ExtResource("5_rw8p7")]
 
