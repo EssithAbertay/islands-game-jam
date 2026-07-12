@@ -20,30 +20,36 @@ enum Mode {ATTACK, DEFEND}
 var mode: Mode = Mode.ATTACK
 
 @export var attackModeTimer: int = 100
-var attackModeTimerRemaining: int = 0
+var attackModeTimerRemaining: float = 0
 @export var turret: PackedScene
 @export var turret_cost = 10
 
+@onready var level_r: Control = $"../CanvasLayer/Control/VBoxContainer/Level"
+@onready var mode_r: Control = $"../CanvasLayer/Control/VBoxContainer/Mode"
+@onready var sand_r: Control = $"../CanvasLayer/Control/VBoxContainer/Sand"
+@onready var time_r: Control = $"../CanvasLayer/Time"
 
 
 
 func _input(event: InputEvent) -> void:
 	if event.is_action_pressed("left_mouse") and mode == Mode.DEFEND:
-		player_score -= turret_cost
-		print("TEST")
-		var mouse_pos = event.position
-		print(mouse_pos)
-		var camera3d = $Camera3D
-		var from = camera3d.project_ray_origin(mouse_pos)
-		var to = from + camera3d.project_ray_normal(mouse_pos) * 1000
-		var query = PhysicsRayQueryParameters3D.create(from, to)
-		query.collision_mask = 1
-		var result = get_world_3d().direct_space_state.intersect_ray(query)
+		
+		if(player_score >= turret_cost):
+			player_score -= turret_cost
+			print("TEST")
+			var mouse_pos = event.position
+			print(mouse_pos)
+			var camera3d = $Camera3D
+			var from = camera3d.project_ray_origin(mouse_pos)
+			var to = from + camera3d.project_ray_normal(mouse_pos) * 1000
+			var query = PhysicsRayQueryParameters3D.create(from, to)
+			query.collision_mask = 1
+			var result = get_world_3d().direct_space_state.intersect_ray(query)
 
-		if result:
-			var turret_instance = turret.instantiate()
-			turret_instance.position = Vector3(result.position.x,0,result.position.z)
-			get_parent().add_child(turret_instance)
+			if result:
+				var turret_instance = turret.instantiate()
+				turret_instance.position = Vector3(result.position.x,0,result.position.z)
+				get_parent().add_child(turret_instance)
 
 func _process(delta):
 	# scaling
@@ -55,8 +61,8 @@ func _process(delta):
 		else: 
 			scale_up_timer = 0
 			scaling = false
-      
-      	# swapping
+	  
+	  	# swapping
 	if (attackModeTimerRemaining >= attackModeTimer):
 		mode = Mode.DEFEND
 
@@ -64,8 +70,11 @@ func _process(delta):
 		attackModeTimerRemaining += delta
 	elif (mode == Mode.DEFEND):
 		pass
-	
-	
+		
+		
+		
+		
+	updateGameState()
 
 func _on_collection_area_area_entered(area: Area3D) -> void:
 	if area.is_in_group("pickup"):
@@ -103,6 +112,14 @@ func _physics_process(delta):
 			position.z += 1
 		if Input.is_action_pressed("move_forward"):
 			position.z -= 1
-
-
 		move_and_slide()
+
+func updateGameState():
+	GameState.mode = int(mode)
+	GameState.player_score = player_score
+	GameState.current_stage = current_stage
+
+	level_r.get_node("Label").text = "Size Level: "+str(current_stage)
+	sand_r.get_node("Label").text = "Sand: " + str(player_score)
+	mode_r.get_node("Label").text = "ATTACK" if mode==Mode.ATTACK else "DEFENCE"
+	time_r.get_node("Label").text = "Time Remaining \n: " + str(floor(attackModeTimer - attackModeTimerRemaining))

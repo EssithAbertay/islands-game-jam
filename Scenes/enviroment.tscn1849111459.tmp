@@ -1,16 +1,10 @@
 [gd_scene format=3 uid="uid://da7r73jbh75ae"]
 
-[ext_resource type="PackedScene" uid="uid://ciqk8xjnpanov" path="res://Scenes/enemy/enemy_island.tscn" id="1_ks4c7"]
 [ext_resource type="Texture2D" uid="uid://cpe7rh3n6xupp" path="res://Assets/ocean.jpg" id="2_ubiir"]
 [ext_resource type="PackedScene" uid="uid://dqnt87eqnh8k0" path="res://Scenes/player/turret.tscn" id="3_ks4c7"]
 [ext_resource type="PackedScene" uid="uid://c1de3immp74h5" path="res://Scenes/points_pickup.tscn" id="4_0evto"]
 [ext_resource type="PackedScene" uid="uid://2f53fjy8td6r" path="res://Scenes/hole_player.tscn" id="4_rw8p7"]
 [ext_resource type="PackedScene" uid="uid://bhkqroynh6w1l" path="res://Scenes/pickup_manager.tscn" id="5_rw8p7"]
-[ext_resource type="PackedScene" uid="uid://cvqv6g8ngobi5" path="res://Scenes/HUD/Mode.tscn" id="6_hhfy0"]
-[ext_resource type="PackedScene" uid="uid://w5r8tvh4f6hu" path="res://Scenes/HUD/Sand.tscn" id="7_ydcye"]
-[ext_resource type="PackedScene" uid="uid://1v4fucmha5kc" path="res://Scenes/HUD/Level.tscn" id="8_ydcye"]
-[ext_resource type="Script" uid="uid://bktqrfgabgqch" path="res://Scripts/island_manager_s.gd" id="9_fnrag"]
-[ext_resource type="PackedScene" uid="uid://jkf6y1djqkwm" path="res://Scenes/HUD/Time.tscn" id="9_mnko7"]
 
 [sub_resource type="BoxShape3D" id="BoxShape3D_6gp1l"]
 size = Vector3(30, 20, 1)
@@ -43,35 +37,3 @@ texture = ExtResource("2_ubiir")
 [node name="CollisionShape3D" type="CollisionShape3D" parent="Sprite3D/StaticBody3D" unique_id=817052863]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -0.55)
 shape = SubResource("BoxShape3D_6gp1l")
-
-[node name="CanvasLayer" type="CanvasLayer" parent="." unique_id=773386936]
-
-[node name="Control" type="Control" parent="CanvasLayer" unique_id=1756539659]
-layout_mode = 3
-anchors_preset = 0
-offset_right = 40.0
-offset_bottom = 40.0
-
-[node name="VBoxContainer" type="VBoxContainer" parent="CanvasLayer/Control" unique_id=1831903469]
-layout_mode = 0
-offset_right = 40.0
-offset_bottom = 60.0
-theme_override_constants/separation = 30
-
-[node name="Level" parent="CanvasLayer/Control/VBoxContainer" unique_id=686894220 instance=ExtResource("8_ydcye")]
-layout_mode = 2
-
-[node name="Sand" parent="CanvasLayer/Control/VBoxContainer" unique_id=23578907 instance=ExtResource("7_ydcye")]
-layout_mode = 2
-
-[node name="Mode" parent="CanvasLayer/Control/VBoxContainer" unique_id=1184301740 instance=ExtResource("6_hhfy0")]
-layout_mode = 2
-
-[node name="Time" parent="CanvasLayer/Control" unique_id=2047506876 instance=ExtResource("9_mnko7")]
-layout_mode = 1
-offset_left = 556.0
-offset_right = 556.0
-
-[node name="IslandManager" type="Node" parent="." unique_id=228367396]
-script = ExtResource("9_fnrag")
-islandScene = ExtResource("1_ks4c7")

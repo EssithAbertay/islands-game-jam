@@ -16,7 +16,7 @@ func _process(delta: float) -> void:
 		enemy_spawn_cd = 0
 	
 		var boat_instance = boat.instantiate()
-		boat_instance.global_position.y=0
+		boat_instance.global_position.y = 0
 		add_child(boat_instance)
 		
 	

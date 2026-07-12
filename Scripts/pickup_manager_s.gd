@@ -19,13 +19,11 @@ func _process(delta: float) -> void:
 	if (timer >= timerMax):
 		timer = 0
 		spawnPickup()
-	
-	pass
 
 
 func spawnPickup():
 	var new_pickup = pickup.instantiate()
-	spawnLocation = Vector3(randf_range(-10.0, 10.0), 0, randf_range(-10, 10))
+	spawnLocation = GameState.getRandomSpawnLocation()
 	spawnSize = floor(randf_range(1, 1.0))
 	new_pickup.global_position = spawnLocation
 	new_pickup.scale = Vector3(spawnSize, spawnSize, spawnSize)
