@@ -1,7 +1,7 @@
 extends Node
 
 @export var boat: PackedScene
-@export var point_value: int = 100
+@export var point_value: int
 var volume: float = 0
 @onready var island_sphere: CollisionShape3D = $"Area3D/Island Sphere"
 

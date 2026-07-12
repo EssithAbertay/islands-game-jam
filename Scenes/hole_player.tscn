@@ -79,7 +79,6 @@ transform = Transform3D(1, 0, 0, 0, 0.760406, 0.649448, 0, -0.649448, 0.760406, 
 
 [node name="CPUParticles3D" type="CPUParticles3D" parent="." unique_id=1015595378]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -1.5, 0)
-emitting = false
 amount = 32
 lifetime = 0.45
 speed_scale = 3.61

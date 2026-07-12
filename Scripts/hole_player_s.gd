@@ -3,7 +3,7 @@ extends CharacterBody3D
 # How fast the player moves in meters per second.
 @export var speed = 14
 @export var player_score: int = 0
-@export var scale_rate: float = 1.01
+@export var scale_rate: float = 1.004
 @export var scale_up_timer_max: float = .8
 var scale_up_timer: float = 0
 var new_scale: Vector3 = Vector3(0,0,0)
@@ -14,7 +14,7 @@ var is_moving: bool = false
 @export var current_stage: int = 0
 @export var stage_count: int = 20
 @export var xp: int = 0
-@export var level_thresholds: Array[int] = [0, 10, 30, 70, 150, 300, 600, 1200, 2500, 5000]
+@export var level_thresholds: Array[int] = [70, 150, 600, 1200, 2500]
 @export var tex_array: Array[Texture2D] = [load("res://Assets/castle8.png"), load("res://Assets/castle7.png"), load("res://Assets/castle9.png"), load("res://Assets/castle6.png"), load("res://Assets/castle10.png")]
 
 enum Mode {ATTACK, DEFEND}
@@ -148,7 +148,7 @@ func _on_collection_area_area_entered(area: Area3D) -> void:
         var area_ref
         
         if "point_value" in area:   
-            target_points = area.get_parent().point_value  
+            target_points = area.point_value  
             area_vol = area.volume
             area_ref = area
         elif area.get_parent() and "point_value" in area.get_parent():
@@ -162,11 +162,16 @@ func _on_collection_area_area_entered(area: Area3D) -> void:
             # 1. Access the pickup data and add points
                 GameState.player_score += target_points
                 print("Player Score: ", GameState.player_score)
+                
                 $"AudioStreamPlayer-pickup".play()
                 
                 xp += target_points
-                print("XP: ", xp)
-                check_level_up()
+                print("Player XP: ", xp)
+                print("Player target pts: ", target_points)
+                if (xp <= 2500):
+                  check_level_up()
+                else: 
+                    scaling = true
                 
                 scale_up_timer = 0
                 area_ref.queue_free()
@@ -178,13 +183,14 @@ func _on_collection_area_area_entered(area: Area3D) -> void:
     pass # Replace with function body.
     
 func check_level_up() -> void:
-    if (current_stage < 10):
-        if xp >= level_thresholds[current_stage]:
-            scaling = true
-            current_stage += 1
-            if current_stage % 2 == 0:
-                $Sprite3D.texture = tex_array[current_stage/2]
+    if (current_stage < 5):
+        if xp >= level_thresholds[current_stage] :
+            if current_stage > 0:
+                scaling = true
+                $Sprite3D.texture = tex_array[current_stage]
                 $"AudioStreamPlayer-levelup".play()
+            current_stage += 1
+           
 
 func _physics_process(delta):
     is_moving = false
