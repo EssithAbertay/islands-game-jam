@@ -27,16 +27,16 @@ var attackModeTimerRemaining: float = 0
 @onready var level_r: Control = $"../CanvasLayer/Control/VBoxContainer/Level"
 @onready var mode_r: Control = $"../CanvasLayer/Control/VBoxContainer/Mode"
 @onready var sand_r: Control = $"../CanvasLayer/Control/VBoxContainer/Sand"
-@onready var time_r: Control = $"../CanvasLayer/Time"
+@onready var time_r: Control = $"../CanvasLayer/Control/Time"
 
-
+@onready var cam = $Camera3D
+@onready var ocean: Sprite3D = $"../Sprite3D"
 
 func _input(event: InputEvent) -> void:
 	if event.is_action_pressed("left_mouse") and mode == Mode.DEFEND:
-		
-		if(player_score >= turret_cost):
-			player_score -= turret_cost
-			print("TEST")
+		print("Tryna build turret")
+		if(GameState.player_score >= turret_cost):
+			GameState.player_score -= turret_cost
 			var mouse_pos = event.position
 			print(mouse_pos)
 			var camera3d = $Camera3D
@@ -63,16 +63,17 @@ func _process(delta):
 			scaling = false
 	  
 	  	# swapping
-	if (attackModeTimerRemaining >= attackModeTimer):
-		mode = Mode.DEFEND
 
 	if(mode == Mode.ATTACK):
-		attackModeTimerRemaining += delta
+		attackModeTimerRemaining += delta	
+		
+		if (attackModeTimerRemaining >= attackModeTimer):
+			mode = Mode.DEFEND
+			attackModeTimerRemaining = attackModeTimer
+			cam.position.y *=2
+
 	elif (mode == Mode.DEFEND):
 		pass
-		
-		
-		
 		
 	updateGameState()
 
@@ -80,8 +81,8 @@ func _on_collection_area_area_entered(area: Area3D) -> void:
 	if area.is_in_group("pickup"):
 		if "point_value" in area && (scale >= area.scale):
 		# 1. Access the pickup data and add points
-			player_score += area.point_value
-			print("Player Score: ", player_score)
+			GameState.player_score += area.point_value
+			print("Player Score: ", GameState.player_score)
 			
 			xp += area.point_value
 			print("XP: ", xp)
@@ -106,22 +107,33 @@ func _physics_process(delta):
 	if(mode == Mode.ATTACK):
 		var direction = Vector3.ZERO
 
-		if Input.is_action_pressed("move_right"):
+		if Input.is_action_pressed("move_right") and position.x < (ocean.global_position.x + ((ocean.texture.get_width()/2) * ocean.scale.x))*ocean.pixel_size-15:
 			position.x += 1
-		if Input.is_action_pressed("move_left"):
+		if Input.is_action_pressed("move_left") and position.x > (ocean.global_position.x - ((ocean.texture.get_width()/2) * ocean.scale.x))*ocean.pixel_size+15:
 			position.x -= 1
-		if Input.is_action_pressed("move_back"):
+		if Input.is_action_pressed("move_back") and position.z < (ocean.global_position.z + ((ocean.texture.get_height()/2) * ocean.scale.z))*ocean.pixel_size-15:
 			position.z += 1
-		if Input.is_action_pressed("move_forward"):
+		if Input.is_action_pressed("move_forward") and position.z > (ocean.global_position.z - ((ocean.texture.get_height()/2) * ocean.scale.z))*ocean.pixel_size+15:
 			position.z -= 1
 		move_and_slide()
+		
+	elif(mode == Mode.DEFEND):
+		
+		if Input.is_action_pressed("move_right") and position.x < (ocean.global_position.x + ((ocean.texture.get_width()/2) * ocean.scale.x))*ocean.pixel_size-15:
+			cam.position.x += 1
+		if Input.is_action_pressed("move_left") and position.x > (ocean.global_position.x - ((ocean.texture.get_width()/2) * ocean.scale.x))*ocean.pixel_size+15:
+			cam.position.x -= 1
+		if Input.is_action_pressed("move_back") and position.z < (ocean.global_position.z + ((ocean.texture.get_height()/2) * ocean.scale.z))*ocean.pixel_size-15:
+			cam.position.z += 1
+		if Input.is_action_pressed("move_forward") and position.z > (ocean.global_position.z - ((ocean.texture.get_height()/2) * ocean.scale.z))*ocean.pixel_size+15:
+			cam.position.z -= 1
+
 
 func updateGameState():
 	GameState.mode = int(mode)
-	GameState.player_score = player_score
 	GameState.current_stage = current_stage
 
 	level_r.get_node("Label").text = "Size Level: "+str(current_stage)
-	sand_r.get_node("Label").text = "Sand: " + str(player_score)
+	sand_r.get_node("Label").text = "Sand: " + str(GameState.player_score)
 	mode_r.get_node("Label").text = "ATTACK" if mode==Mode.ATTACK else "DEFENCE"
 	# time_r.get_node("Label").text = "Time Remaining \n: " + str(floor(attackModeTimer - attackModeTimerRemaining))

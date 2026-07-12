@@ -3,6 +3,7 @@ extends Node
 var player_score: int = 0
 enum Mode {ATTACK, DEFEND}
 var mode: Mode = Mode.ATTACK
+var swapping_mode: bool = false
 var current_stage: int = 0
 
 # Called when the node enters the scene tree for the first time.

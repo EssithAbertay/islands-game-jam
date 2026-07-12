@@ -9,6 +9,7 @@ var sprite3d
 var flashDamage: bool = false
 @export var flashDamageTime = 0.2
 var flashDamageTimeRemaining = 0
+@export var value = 7
 
 func takeDamage(damage: int) -> void:
 	currentHealth -= damage
@@ -18,6 +19,7 @@ func takeDamage(damage: int) -> void:
 
 func checkStatus():
 	if (currentHealth <= 0):
+		GameState.player_score += value
 		queue_free()
 		
 # Called when the node enters the scene tree for the first time.
