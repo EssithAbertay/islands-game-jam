@@ -27,9 +27,7 @@ var attackModeTimerRemaining: float = 0
 @onready var level_r: Control = $"../CanvasLayer/Control/VBoxContainer/Level"
 @onready var mode_r: Control = $"../CanvasLayer/Control/VBoxContainer/Mode"
 @onready var sand_r: Control = $"../CanvasLayer/Control/VBoxContainer/Sand"
-@onready var time_r: Control = $"../CanvasLayer/Time"
-
-
+@onready var time_r: Control = $"../CanvasLayer/Control/Time"
 
 func _input(event: InputEvent) -> void:
 	if event.is_action_pressed("left_mouse") and mode == Mode.DEFEND:
