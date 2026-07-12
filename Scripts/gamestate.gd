@@ -17,3 +17,4 @@ func _process(delta: float) -> void:
 
 func getRandomSpawnLocation() -> Vector3:
 	return  Vector3(randf_range(-10.0, 10.0), 0, randf_range(-10, 10))
+	

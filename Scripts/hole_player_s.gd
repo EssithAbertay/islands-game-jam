@@ -14,7 +14,7 @@ var scaling: bool = false
 @export var stage_count: int = 20
 @export var xp: int = 0
 @export var level_thresholds: Array[int] = [0, 10, 30, 70, 150, 300, 600, 1200, 2500, 5000]
-
+@export var tex_array: Array[Texture2D] = [load("res://Assets/castle8.png"), load("res://Assets/castle7.png"), load("res://Assets/castle9.png"), load("res://Assets/castle6.png"), load("res://Assets/castle10.png")]
 
 enum Mode {ATTACK, DEFEND}
 var mode: Mode = Mode.ATTACK
@@ -31,6 +31,10 @@ var attackModeTimerRemaining: float = 0
 
 @onready var cam = $Camera3D
 @onready var ocean: Sprite3D = $"../Sprite3D"
+
+func _ready() -> void:
+	if tex_array.size() > 0:
+		$Sprite3D.texture = tex_array[0]
 
 func _input(event: InputEvent) -> void:
 	if event.is_action_pressed("left_mouse") and mode == Mode.DEFEND:
@@ -58,9 +62,11 @@ func _process(delta):
 		if (scale_up_timer <= scale_up_timer_max):
 			new_scale = scale * scale_rate
 			scale = new_scale + (scale - new_scale) * scale_up_timer
+			$CPUParticles3D_level.emitting = true;
 		else: 
 			scale_up_timer = 0
 			scaling = false
+			$CPUParticles3D_level.emitting = false;
 	  
 	  	# swapping
 
@@ -99,7 +105,8 @@ func check_level_up() -> void:
 			scaling = true
 			current_stage += 1
 			if current_stage % 2 == 0:
-				$Sprite3D.texture = load("res://Assets/castle6.png")
+				$Sprite3D.texture = tex_array[current_stage/2]
+				#$Sprite3D.texture = load("res://Assets/castle6.png")
 
 	
 func _physics_process(delta):
@@ -136,4 +143,4 @@ func updateGameState():
 	level_r.get_node("Label").text = "Size Level: "+str(current_stage)
 	sand_r.get_node("Label").text = "Sand: " + str(GameState.player_score)
 	mode_r.get_node("Label").text = "ATTACK" if mode==Mode.ATTACK else "DEFENCE"
-	# time_r.get_node("Label").text = "Time Remaining \n: " + str(floor(attackModeTimer - attackModeTimerRemaining))
+	time_r.get_node("Label").text = "Time Remaining \n: " + str(floor(attackModeTimer - attackModeTimerRemaining))
