@@ -1,7 +1,7 @@
 [gd_scene format=3 uid="uid://dqnt87eqnh8k0"]
 
 [ext_resource type="Script" uid="uid://bfxko6yl3ku60" path="res://Scripts/turret_s.gd" id="1_wbe0e"]
-[ext_resource type="Texture2D" uid="uid://bx4uu4n1wkwm4" path="res://Assets/turret.png" id="1_xjgln"]
+[ext_resource type="PackedScene" uid="uid://beicgyjprx0fu" path="res://Assets/rail.fbx" id="3_kpd32"]
 
 [sub_resource type="SphereShape3D" id="SphereShape3D_6gp1l"]
 radius = 5.0
@@ -12,11 +12,6 @@ damage = 20
 fireCd = 0.3
 fireRadius = 15
 
-[node name="Sprite3D" type="Sprite3D" parent="." unique_id=163992799]
-transform = Transform3D(0.5, 0, 0, 0, 0.5, 0, 0, 0, 0.5, 0, 0, 0)
-render_priority = 2
-texture = ExtResource("1_xjgln")
-
 [node name="Area3D" type="Area3D" parent="." unique_id=745478928]
 collision_layer = 4
 collision_mask = 4
@@ -25,6 +20,9 @@ collision_mask = 4
 shape = SubResource("SphereShape3D_6gp1l")
 
 [node name="RangeIndicator" type="MeshInstance3D" parent="." unique_id=2061403276]
+
+[node name="rail" parent="." unique_id=1482321167 instance=ExtResource("3_kpd32")]
+transform = Transform3D(0.43, 0, 0, 0, 0.43, 0, 0, 0, 0.25, 0, 1.5460647, 0)
 
 [connection signal="body_entered" from="Area3D" to="." method="_on_area_3d_body_entered"]
 [connection signal="body_exited" from="Area3D" to="." method="_on_area_3d_body_exited"]

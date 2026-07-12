@@ -30,6 +30,7 @@ var attackModeTimerRemaining: float = 0
 @onready var time_r: Control = $"../CanvasLayer/Control/Time"
 @onready var popup_r: Control = $"../CanvasLayer/Control/Popup"
 @onready var enemies_remaining_r: Control = $"../CanvasLayer/Control/EnemiesRemaining"
+@onready var lives_r: Control = $"../CanvasLayer/Control/VBoxContainer/Lives"
 
 @onready var cam = $Camera3D
 @onready var ocean: Sprite3D = $"../Sprite3D"
@@ -39,6 +40,9 @@ var goToDefend: bool = false
 var waveCdRemaining:float = 0
 var wavesSpawned:int = 0
 var wavesAllSpawned:bool=false
+
+var savedCamPosition: Vector3
+var goToAttack: bool = false
 
 func _ready() -> void:
 	if tex_array.size() > 0:
@@ -53,7 +57,7 @@ func _input(event: InputEvent) -> void:
 			if(GameState.player_score >= GameState.turretCost):
 				GameState.player_score -= GameState.turretCost
 				
-				GameState.turretCost *= GameState.turretCostScaling
+				GameState.turretCost += GameState.turretCostScaling
 				
 				var mouse_pos = event.position
 				print(mouse_pos)
@@ -72,6 +76,10 @@ func _input(event: InputEvent) -> void:
 	if(GameState.mode == GameState.Mode.SETUP):
 		if(Input.is_action_pressed("space")):
 			goToDefend = true
+			
+	if(GameState.mode == GameState.Mode.SETUPATTACK):
+		if(Input.is_action_pressed("space")):
+			goToAttack = true
 
 func _process(delta):
 	# scaling
@@ -92,7 +100,9 @@ func _process(delta):
 		
 		# moving to setup mode
 		if (attackModeTimerRemaining >= attackModeTimer):
+			savedCamPosition = cam.position
 			GameState.mode = GameState.Mode.SETUP
+			popup_r.get_node("Label").text = "The Boats are coming! Defend Yourself! \nClick To Place A Turret \n Turrets Cost: " + str(GameState.turretCost) + " Sand!\nPress Space To Start Wave!"
 			attackModeTimerRemaining = attackModeTimer
 			cam.position.y *=2
 			popup_r.visible = true
@@ -131,8 +141,25 @@ func _process(delta):
 		
 	elif (GameState.mode == GameState.Mode.SETUPATTACK):
 		time_r.visible=true
+
+		if(goToAttack):		
+			GameState.spawnIslands = true
+			GameState.numIslandsToSpawn += 3
+			# back to attack mode
+			goToAttack = false
+			cam.position =savedCamPosition
+			GameState.mode = GameState.Mode.ATTACK
 	
 	updateGameState()
+	
+	# restart game on death
+	if(GameState.lives_remaining <= 0):
+		popup_r.visible = true
+		popup_r.get_node("Label").text = "YOU LOSE!\nRESTARTING..."
+		GameState.mode = GameState.Mode.DEFEND
+		await get_tree().create_timer(3.0).timeout
+		GameState.reset()
+		get_tree().reload_current_scene()
 
 func _on_collection_area_area_entered(area: Area3D) -> void:
 	if area.is_in_group("pickup"):
@@ -165,12 +192,6 @@ func _physics_process(delta):
 	if(GameState.mode == GameState.Mode.ATTACK):
 		var direction = Vector3.ZERO
 
-
-		print((ocean.global_position.x + ((ocean.texture.get_width()/2) * ocean.scale.x))*ocean.pixel_size-15)
-		print((ocean.global_position.x - ((ocean.texture.get_width()/2) * ocean.scale.x))*ocean.pixel_size+15)
-		print((ocean.global_position.z + ((ocean.texture.get_height()/2) * ocean.scale.z))*ocean.pixel_size-15)
-		print((ocean.global_position.z -((ocean.texture.get_height()/2) * ocean.scale.z))*ocean.pixel_size+15)
-		
 		if Input.is_action_pressed("move_right") and position.x < (ocean.global_position.x + ((ocean.texture.get_width()/2) * ocean.scale.x))*ocean.pixel_size-15:
 			position.x += 1
 			is_moving = true;
@@ -197,9 +218,19 @@ func _physics_process(delta):
 
 func updateGameState():
 	GameState.current_stage = current_stage
-
-	level_r.get_node("Label").text = "Size Level: "+str(current_stage)
+	
+	lives_r.get_node("Label").text = "Lives: "+ str(GameState.lives_remaining)
+	level_r.get_node("Label").text = "Size Level: "+ str(current_stage)
 	sand_r.get_node("Label").text = "Sand: " + str(GameState.player_score)
 	mode_r.get_node("Label").text = "Mode: " + "ATTACK" if GameState.mode == GameState.Mode.ATTACK else "DEFENCE"  if GameState.mode == GameState.Mode.DEFEND else "SETUP"
-	time_r.get_node("Label").text = "Time Remaining \n: " + str(floor(attackModeTimer - attackModeTimerRemaining))
+	time_r.get_node("Label").text = "Time Remaining\n" + str(floor(attackModeTimer - attackModeTimerRemaining))
 	GameState.is_moving = is_moving
+
+	enemies_remaining_r.get_node("Label").text = "Enemies Remaining\n" + str(get_tree().get_nodes_in_group("enemy").size())
+
+func _on_death_area_body_entered(body: Node3D) -> void:
+	print("ENTERED" + str(body))
+	GameState.lives_remaining-=1
+	body.queue_free()
+	
+	pass # Replace with function body.

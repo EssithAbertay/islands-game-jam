@@ -46,6 +46,9 @@ rings = 3
 offsets = PackedFloat32Array(0, 0.5100671, 1)
 colors = PackedColorArray(1, 0.44313726, 0.7372549, 1, 0.5827933, 0.916375, 0.9999997, 1, 0.20784314, 1, 0, 1)
 
+[sub_resource type="BoxShape3D" id="BoxShape3D_07vgb"]
+size = Vector3(2.1560059, 4.3341064, 2.4467926)
+
 [node name="HolePlayer" type="CharacterBody3D" unique_id=391892986 groups=["player"]]
 collision_layer = 3
 script = ExtResource("1_bfwi4")
@@ -131,4 +134,13 @@ max_polyphony = 2
 stream = ExtResource("8_rvhdk")
 script = ExtResource("9_qb6hq")
 
+[node name="DeathArea" type="Area3D" parent="." unique_id=386153797]
+collision_layer = 4
+collision_mask = 4
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="DeathArea" unique_id=191206955]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.049926758, -0.5438843, 0.019569397)
+shape = SubResource("BoxShape3D_07vgb")
+
 [connection signal="area_entered" from="CollectionArea" to="." method="_on_collection_area_area_entered"]
+[connection signal="body_entered" from="DeathArea" to="." method="_on_death_area_body_entered"]

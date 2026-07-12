@@ -65,6 +65,15 @@ func get_closest_enemy():
 func shoot(body: Node3D):
 	var start = global_position
 	var end = body.global_position
+	
+	var startrot: Vector3 = Vector3(start.x,0,start.z)
+	var endtrot: Vector3 = Vector3(end.x,0,end.z)
+	
+	look_at(endtrot,startrot)
+	rotation.z -= PI/2
+	rotation.x-= PI
+	
+	
 	spawn_tracer(start,end)
 	
 	

@@ -6,6 +6,7 @@
 [ext_resource type="PackedScene" uid="uid://2f53fjy8td6r" path="res://Scenes/hole_player.tscn" id="4_rw8p7"]
 [ext_resource type="Texture2D" uid="uid://b3rlxkufk4e27" path="res://Assets/water4.jpg" id="5_4k8vw"]
 [ext_resource type="PackedScene" uid="uid://bhkqroynh6w1l" path="res://Scenes/pickup_manager.tscn" id="5_rw8p7"]
+[ext_resource type="PackedScene" uid="uid://twql6lygv1uq" path="res://Scenes/HUD/Lives.tscn" id="6_h4v0y"]
 [ext_resource type="PackedScene" uid="uid://cvqv6g8ngobi5" path="res://Scenes/HUD/Mode.tscn" id="6_hhfy0"]
 [ext_resource type="PackedScene" uid="uid://w5r8tvh4f6hu" path="res://Scenes/HUD/Sand.tscn" id="7_ydcye"]
 [ext_resource type="PackedScene" uid="uid://1v4fucmha5kc" path="res://Scenes/HUD/Level.tscn" id="8_ydcye"]
@@ -59,10 +60,10 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -10.927)
 
 [node name="HolePlayer" parent="." unique_id=391892986 instance=ExtResource("4_rw8p7")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.017916441, -4.7683716e-07, -2.058532)
-attackModeTimer = 15
+attackModeTimer = 45
 
 [node name="PickupManager" parent="." unique_id=600735694 instance=ExtResource("5_rw8p7")]
-timerMax = 1.0
+maxToSpawn = 5
 
 [node name="Sprite3D" type="Sprite3D" parent="." unique_id=678178117]
 transform = Transform3D(20.615, 0, 0, 0, -9.0111024e-07, 20.615, 0, -20.615, -9.0111024e-07, 0, -1, 0)
@@ -90,7 +91,10 @@ offset_right = 40.0
 offset_bottom = 60.0
 theme_override_constants/separation = 30
 
-[node name="Level" parent="CanvasLayer/Control/VBoxContainer" unique_id=686894220 instance=ExtResource("8_ydcye")]
+[node name="Lives" parent="CanvasLayer/Control/VBoxContainer" unique_id=686894220 instance=ExtResource("6_h4v0y")]
+layout_mode = 2
+
+[node name="Level" parent="CanvasLayer/Control/VBoxContainer" unique_id=1394807528 instance=ExtResource("8_ydcye")]
 layout_mode = 2
 
 [node name="Sand" parent="CanvasLayer/Control/VBoxContainer" unique_id=23578907 instance=ExtResource("7_ydcye")]

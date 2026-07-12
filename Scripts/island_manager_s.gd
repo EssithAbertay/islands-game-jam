@@ -2,12 +2,15 @@ extends Node
 
 @export var islandScene: PackedScene
 
-@export var islandNumbers: int = 20
-
 # Called when the node enters the scene tree for the first time.
 func _ready() -> void:
-	for n in islandNumbers:
+	for n in GameState.numIslandsToSpawn:
 		spawnIsland()
+
+func _process(delta: float) -> void:
+	if GameState.spawnIslands:
+		for n in GameState.numIslandsToSpawn:
+			spawnIsland()
 
 func spawnIsland():
 	var islandSceneInstance = islandScene.instantiate()
