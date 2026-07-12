@@ -5,6 +5,10 @@
 [ext_resource type="Texture2D" uid="uid://kc3pwoy434if" path="res://Assets/sand.jpg" id="3_aa4id"]
 [ext_resource type="Texture2D" uid="uid://bs8llvuh6l1sn" path="res://Assets/castle8.png" id="3_sa8fd"]
 [ext_resource type="Texture2D" uid="uid://nwjww3lcpg1m" path="res://Assets/919bae7e.png" id="5_vv0c0"]
+[ext_resource type="AudioStream" uid="uid://sjtt230oby8h" path="res://Assets/sandSFX.wav" id="6_c7g5q"]
+[ext_resource type="AudioStream" uid="uid://vl7s4fxowmyv" path="res://Assets/levelup.wav" id="7_vs0nv"]
+[ext_resource type="AudioStream" uid="uid://c5k8dcl05vf44" path="res://Assets/river.wav" id="8_rvhdk"]
+[ext_resource type="Script" uid="uid://da7qpxx7feki7" path="res://Scenes/audio_stream_player_s.gd" id="9_qb6hq"]
 
 [sub_resource type="SphereShape3D" id="SphereShape3D_o2h2n"]
 
@@ -113,5 +117,18 @@ linear_accel_max = 102.25
 scale_amount_min = 0.0
 color_ramp = SubResource("Gradient_rvhdk")
 hue_variation_max = 1.0
+
+[node name="AudioStreamPlayer-pickup" type="AudioStreamPlayer" parent="." unique_id=1817645219]
+stream = ExtResource("6_c7g5q")
+max_polyphony = 2
+
+[node name="AudioStreamPlayer-levelup" type="AudioStreamPlayer" parent="." unique_id=868144061]
+stream = ExtResource("7_vs0nv")
+volume_db = 24.0
+max_polyphony = 2
+
+[node name="AudioStreamPlayer-moving" type="AudioStreamPlayer" parent="." unique_id=1374880548]
+stream = ExtResource("8_rvhdk")
+script = ExtResource("9_qb6hq")
 
 [connection signal="area_entered" from="CollectionArea" to="." method="_on_collection_area_area_entered"]

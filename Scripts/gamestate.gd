@@ -9,6 +9,7 @@ var turretCost:int = 10
 var turretCostScaling = 1.1
 var spawnWave: bool = false
 var numberOfWavesToSpawn: int = 3
+var is_moving: bool = false
 
 # Called when the node enters the scene tree for the first time.
 func _ready() -> void:
