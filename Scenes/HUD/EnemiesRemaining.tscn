@@ -1,0 +1,18 @@
+[gd_scene format=3 uid="uid://nyet0f1m8k0l"]
+
+[node name="Time" type="Control" unique_id=2047506876]
+layout_mode = 3
+anchors_preset = 5
+anchor_left = 0.5
+anchor_right = 0.5
+grow_horizontal = 2
+
+[node name="Label" type="Label" parent="." unique_id=1055747093]
+layout_mode = 0
+offset_left = -37.0
+offset_top = 1.0
+offset_right = 36.0
+offset_bottom = 50.0
+text = "Time Left
+100s"
+horizontal_alignment = 1
