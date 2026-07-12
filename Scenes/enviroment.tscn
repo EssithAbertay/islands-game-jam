@@ -12,6 +12,7 @@
 [ext_resource type="Script" uid="uid://bktqrfgabgqch" path="res://Scripts/island_manager_s.gd" id="9_fnrag"]
 [ext_resource type="PackedScene" uid="uid://jkf6y1djqkwm" path="res://Scenes/HUD/Time.tscn" id="9_mnko7"]
 [ext_resource type="PackedScene" uid="uid://td3csq38aygk" path="res://Scenes/HUD/Popup.tscn" id="10_d66yy"]
+[ext_resource type="PackedScene" uid="uid://nyet0f1m8k0l" path="res://Scenes/HUD/EnemiesRemaining.tscn" id="10_m81p3"]
 [ext_resource type="Shader" uid="uid://bupxg588w5lrl" path="res://Shaders/customsky.tres" id="12_d66yy"]
 [ext_resource type="PackedScene" uid="uid://3r6o1s2v02ns" path="res://Scenes/audio_stream_player.tscn" id="14_m81p3"]
 [ext_resource type="AudioStream" uid="uid://ddgrl1yjm4nm6" path="res://Assets/song4.wav" id="15_uox07"]
@@ -58,7 +59,7 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -10.927)
 
 [node name="HolePlayer" parent="." unique_id=391892986 instance=ExtResource("4_rw8p7")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.017916441, -4.7683716e-07, -2.058532)
-attackModeTimer = 50
+attackModeTimer = 15
 
 [node name="PickupManager" parent="." unique_id=600735694 instance=ExtResource("5_rw8p7")]
 timerMax = 1.0
@@ -100,13 +101,24 @@ layout_mode = 2
 
 [node name="Time" parent="CanvasLayer/Control" unique_id=2047506876 instance=ExtResource("9_mnko7")]
 layout_mode = 1
-offset_left = 556.0
-offset_right = 556.0
+offset_left = 538.0
+offset_top = 2.0
+offset_right = 538.0
+offset_bottom = 2.0
+
+[node name="EnemiesRemaining" parent="CanvasLayer/Control" unique_id=1777217421 instance=ExtResource("10_m81p3")]
+layout_mode = 1
+offset_left = 538.0
+offset_top = 2.0
+offset_right = 538.0
+offset_bottom = 2.0
 
 [node name="Popup" parent="CanvasLayer/Control" unique_id=917695254 instance=ExtResource("10_d66yy")]
 layout_mode = 1
-offset_left = 556.0
-offset_right = 556.0
+offset_left = 553.0
+offset_top = 607.0
+offset_right = 553.0
+offset_bottom = 607.0
 
 [node name="IslandManager" type="Node" parent="." unique_id=228367396]
 script = ExtResource("9_fnrag")
