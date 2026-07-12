@@ -1,19 +1,24 @@
 [gd_scene format=3 uid="uid://c1de3immp74h5"]
 
 [ext_resource type="Script" uid="uid://dr56oew2msunn" path="res://Scripts/points_pickup_s.gd" id="1_1q64a"]
-[ext_resource type="Texture2D" uid="uid://d36kpb32qqa8n" path="res://Assets/theguy.jpg" id="1_16ao7"]
+[ext_resource type="Texture2D" uid="uid://kc3pwoy434if" path="res://Assets/sand.jpg" id="2_1q64a"]
 
 [sub_resource type="SphereShape3D" id="SphereShape3D_o2h2n"]
+
+[sub_resource type="SphereMesh" id="SphereMesh_o2h2n"]
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_4dsy2"]
+shading_mode = 0
+albedo_texture = ExtResource("2_1q64a")
 
 [node name="PointsPickup" type="Area3D" unique_id=1041366980 groups=["pickup"]]
 collision_mask = 0
 script = ExtResource("1_1q64a")
 
-[node name="Sprite3D" type="Sprite3D" parent="." unique_id=115415954]
-transform = Transform3D(0.1, 0, 0, 0, 0.1, 0, 0, 0, 0.1, 0, 0, 0)
-render_priority = 10
-texture = ExtResource("1_16ao7")
-
 [node name="CollisionShape3D" type="CollisionShape3D" parent="." unique_id=1371667404]
 transform = Transform3D(1.2, 0, 0, 0, 1.2, 0, 0, 0, 1.2, 0, 0, 0)
 shape = SubResource("SphereShape3D_o2h2n")
+
+[node name="MeshInstance3D" type="MeshInstance3D" parent="." unique_id=1228969541]
+mesh = SubResource("SphereMesh_o2h2n")
+surface_material_override/0 = SubResource("StandardMaterial3D_4dsy2")

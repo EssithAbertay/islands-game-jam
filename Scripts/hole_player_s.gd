@@ -97,6 +97,8 @@ func check_level_up() -> void:
 		if xp >= level_thresholds[current_stage]:
 			scaling = true
 			current_stage += 1
+			if current_stage % 2 == 0:
+				$Sprite3D.texture = load("res://Assets/castle6.png")
 
 	
 func _physics_process(delta):
@@ -122,4 +124,4 @@ func updateGameState():
 	level_r.get_node("Label").text = "Size Level: "+str(current_stage)
 	sand_r.get_node("Label").text = "Sand: " + str(player_score)
 	mode_r.get_node("Label").text = "ATTACK" if mode==Mode.ATTACK else "DEFENCE"
-	time_r.get_node("Label").text = "Time Remaining \n: " + str(floor(attackModeTimer - attackModeTimerRemaining))
+	# time_r.get_node("Label").text = "Time Remaining \n: " + str(floor(attackModeTimer - attackModeTimerRemaining))

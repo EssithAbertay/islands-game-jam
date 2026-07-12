@@ -24,7 +24,7 @@ func _process(delta: float) -> void:
 func spawnPickup():
 	var new_pickup = pickup.instantiate()
 	spawnLocation = GameState.getRandomSpawnLocation()
-	spawnSize = floor(randf_range(1, 1.0))
+	spawnSize = floor(randf_range(1, 5.0))
 	new_pickup.global_position = spawnLocation
 	new_pickup.scale = Vector3(spawnSize, spawnSize, spawnSize)
 	new_pickup.point_value = spawnSize;

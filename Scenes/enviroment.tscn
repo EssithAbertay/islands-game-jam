@@ -5,12 +5,19 @@
 [ext_resource type="PackedScene" uid="uid://dqnt87eqnh8k0" path="res://Scenes/player/turret.tscn" id="3_ks4c7"]
 [ext_resource type="PackedScene" uid="uid://c1de3immp74h5" path="res://Scenes/points_pickup.tscn" id="4_0evto"]
 [ext_resource type="PackedScene" uid="uid://2f53fjy8td6r" path="res://Scenes/hole_player.tscn" id="4_rw8p7"]
+[ext_resource type="Texture2D" uid="uid://b3rlxkufk4e27" path="res://Assets/water4.jpg" id="5_4k8vw"]
 [ext_resource type="PackedScene" uid="uid://bhkqroynh6w1l" path="res://Scenes/pickup_manager.tscn" id="5_rw8p7"]
 [ext_resource type="PackedScene" uid="uid://cvqv6g8ngobi5" path="res://Scenes/HUD/Mode.tscn" id="6_hhfy0"]
 [ext_resource type="PackedScene" uid="uid://w5r8tvh4f6hu" path="res://Scenes/HUD/Sand.tscn" id="7_ydcye"]
 [ext_resource type="PackedScene" uid="uid://1v4fucmha5kc" path="res://Scenes/HUD/Level.tscn" id="8_ydcye"]
 [ext_resource type="Script" uid="uid://bktqrfgabgqch" path="res://Scripts/island_manager_s.gd" id="9_fnrag"]
 [ext_resource type="PackedScene" uid="uid://jkf6y1djqkwm" path="res://Scenes/HUD/Time.tscn" id="9_mnko7"]
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_m81p3"]
+shading_mode = 0
+albedo_texture = ExtResource("5_4k8vw")
+uv1_scale = Vector3(32, 32, 32)
+texture_filter = 5
 
 [sub_resource type="BoxShape3D" id="BoxShape3D_6gp1l"]
 size = Vector3(30, 20, 1)
@@ -35,7 +42,9 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.017916441, -4.7683716e-07, 
 [node name="PickupManager" parent="." unique_id=600735694 instance=ExtResource("5_rw8p7")]
 
 [node name="Sprite3D" type="Sprite3D" parent="." unique_id=678178117]
-transform = Transform3D(20.615, 0, 0, 0, -9.0111024e-07, 20.615, 0, -20.615, -9.0111024e-07, 0, 0, 0)
+transform = Transform3D(20.615, 0, 0, 0, -9.0111024e-07, 20.615, 0, -20.615, -9.0111024e-07, 0, -1, 0)
+material_override = SubResource("StandardMaterial3D_m81p3")
+texture_filter = 2
 texture = ExtResource("2_ubiir")
 
 [node name="StaticBody3D" type="StaticBody3D" parent="Sprite3D" unique_id=1068328881]
