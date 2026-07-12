@@ -8,6 +8,7 @@ extends CharacterBody3D
 var scale_up_timer: float = 0
 var new_scale: Vector3 = Vector3(0,0,0)
 var scaling: bool = false
+var is_moving: bool = false
 
 #need x xp to beat a stage which will up ur size and reset ur xp 
 @export var current_stage: int = 0
@@ -101,6 +102,7 @@ func _on_collection_area_area_entered(area: Area3D) -> void:
 		# 1. Access the pickup data and add points
 			GameState.player_score += area.point_value
 			print("Player Score: ", GameState.player_score)
+			$"AudioStreamPlayer-pickup".play()
 			
 			xp += area.point_value
 			print("XP: ", xp)
@@ -118,11 +120,11 @@ func check_level_up() -> void:
 			current_stage += 1
 			if current_stage % 2 == 0:
 				$Sprite3D.texture = tex_array[current_stage/2]
-				#$Sprite3D.texture = load("res://Assets/castle6.png")
+				$"AudioStreamPlayer-levelup".play()
 
 	
 func _physics_process(delta):
-	
+	is_moving = false
 	if(GameState.mode == GameState.Mode.ATTACK):
 		var direction = Vector3.ZERO
 
@@ -134,12 +136,16 @@ func _physics_process(delta):
 		
 		if Input.is_action_pressed("move_right") and position.x < (ocean.global_position.x + ((ocean.texture.get_width()/2) * ocean.scale.x))*ocean.pixel_size-15:
 			position.x += 1
+			is_moving = true;
 		if Input.is_action_pressed("move_left") and position.x > (ocean.global_position.x - ((ocean.texture.get_width()/2) * ocean.scale.x))*ocean.pixel_size+15:
 			position.x -= 1
+			is_moving = true;
 		if Input.is_action_pressed("move_back") and position.z < (ocean.global_position.z + ((ocean.texture.get_height()/2) * ocean.scale.z))*ocean.pixel_size-15:
 			position.z += 1
+			is_moving = true;
 		if Input.is_action_pressed("move_forward") and position.z > (ocean.global_position.z - ((ocean.texture.get_height()/2) * ocean.scale.z))*ocean.pixel_size+15:
 			position.z -= 1
+			is_moving = true;
 		move_and_slide()
 		
 	elif(GameState.mode == GameState.Mode.DEFEND):
@@ -161,3 +167,4 @@ func updateGameState():
 	sand_r.get_node("Label").text = "Sand: " + str(GameState.player_score)
 	mode_r.get_node("Label").text = "ATTACK" if GameState.mode == GameState.Mode.ATTACK else "DEFENCE"  if GameState.mode == GameState.Mode.DEFEND else "SETUP"
 	time_r.get_node("Label").text = "Time Remaining \n: " + str(floor(attackModeTimer - attackModeTimerRemaining))
+	GameState.is_moving = is_moving

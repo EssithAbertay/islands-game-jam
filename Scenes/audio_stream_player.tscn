@@ -1,0 +1,7 @@
+[gd_scene format=3 uid="uid://3r6o1s2v02ns"]
+
+[ext_resource type="AudioStream" uid="uid://pndjglikgyi6" path="res://Assets/caribbean-beach-vocalista-main-version-32879-02-00.mp3" id="1_g84o6"]
+
+[node name="AudioStreamPlayer" type="AudioStreamPlayer" unique_id=81601162]
+stream = ExtResource("1_g84o6")
+autoplay = true

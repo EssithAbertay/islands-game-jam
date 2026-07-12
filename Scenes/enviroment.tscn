@@ -13,6 +13,9 @@
 [ext_resource type="PackedScene" uid="uid://jkf6y1djqkwm" path="res://Scenes/HUD/Time.tscn" id="9_mnko7"]
 [ext_resource type="PackedScene" uid="uid://td3csq38aygk" path="res://Scenes/HUD/Popup.tscn" id="10_d66yy"]
 [ext_resource type="Shader" uid="uid://bupxg588w5lrl" path="res://Shaders/customsky.tres" id="12_d66yy"]
+[ext_resource type="PackedScene" uid="uid://3r6o1s2v02ns" path="res://Scenes/audio_stream_player.tscn" id="14_m81p3"]
+[ext_resource type="AudioStream" uid="uid://ddgrl1yjm4nm6" path="res://Assets/song4.wav" id="15_uox07"]
+[ext_resource type="Script" uid="uid://da7qpxx7feki7" path="res://Scenes/audio_stream_player_s.gd" id="16_uox07"]
 
 [sub_resource type="StandardMaterial3D" id="StandardMaterial3D_m81p3"]
 shading_mode = 0
@@ -111,3 +114,9 @@ islandScene = ExtResource("1_ks4c7")
 
 [node name="WorldEnvironment" type="WorldEnvironment" parent="." unique_id=1249140800]
 environment = SubResource("Environment_jn02h")
+
+[node name="AudioStreamPlayer" parent="." unique_id=81601162 instance=ExtResource("14_m81p3")]
+stream = ExtResource("15_uox07")
+volume_db = 24.0
+max_polyphony = 3
+script = ExtResource("16_uox07")

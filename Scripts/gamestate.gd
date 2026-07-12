@@ -5,6 +5,7 @@ enum Mode {ATTACK, DEFEND, SETUP}
 var mode: Mode = Mode.ATTACK
 var swapping_mode: bool = false
 var current_stage: int = 0
+var is_moving: bool = false
 
 # Called when the node enters the scene tree for the first time.
 func _ready() -> void:
